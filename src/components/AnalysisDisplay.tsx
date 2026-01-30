@@ -23,10 +23,10 @@ const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <span className="text-sm font-medium text-gray-700">{label}</span>
-        <span className="text-sm font-bold text-gray-900">{value}/{max}</span>
+        <span className="text-sm font-medium">{label}</span>
+        <span className="text-sm font-bold">{value}/{max}</span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2">
+      <div className="w-full rounded-full h-2">
         <div
           className={`h-2 rounded-full transition-all duration-500 ${getColor(value)}`}
           style={{ width: `${percentage}%` }}
@@ -40,20 +40,20 @@ const SectionAnalysis: React.FC<{
   title: string;
   section: { strengths: string[]; improvements: string[] }
 }> = ({ title, section }) => (
-  <div className="bg-white rounded-lg border border-gray-200 p-6">
-    <h4 className="text-lg font-semibold text-gray-900 mb-4">{title}</h4>
+  <div className="rounded-lg border border-border p-6">
+    <h4 className="text-lg font-semibold mb-4">{title}</h4>
 
     {section.strengths.length > 0 && (
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-3">
-          <CheckCircle className="w-5 h-5 text-green-500" />
-          <h5 className="font-medium text-green-700">Strengths</h5>
+          <CheckCircle className="w-5 h-5 text-primary" />
+          <h5 className="font-medium text-primary">Strengths</h5>
         </div>
         <ul className="space-y-2">
           {section.strengths.map((strength, index) => (
             <li key={index} className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-gray-700 text-sm">{strength}</span>
+              <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
+              <span className="text-sm">{strength}</span>
             </li>
           ))}
         </ul>
@@ -69,8 +69,8 @@ const SectionAnalysis: React.FC<{
         <ul className="space-y-2">
           {section.improvements.map((improvement, index) => (
             <li key={index} className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-gray-700 text-sm">{improvement}</span>
+              <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
+              <span className="text-sm">{improvement}</span>
             </li>
           ))}
         </ul>
@@ -88,15 +88,15 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
 
   return (
     <div className="space-y-8">
-      <div className={`rounded-xl border-2 p-6 border-gray-200`}>
+      <div className={`rounded-xl border p-6 border-border`}>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg">
-              <TrendingUp className="w-6 h-6 text-green-600" />
+              <TrendingUp className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Resume Rating</h3>
-              <p className="text-gray-600">Based on comprehensive analysis</p>
+              <h3 className="text-xl font-bold">Resume Rating</h3>
+              <p>Based on comprehensive analysis</p>
             </div>
           </div>
           <div className={`text-4xl font-black ${getOverallScoreColor(result.overallScore)}`}>
@@ -105,13 +105,13 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
         </div>
 
         {result.summary && (
-          <p className="text-gray-700 leading-relaxed">{result.summary}</p>
+          <p className="leading-relaxed">{result.summary}</p>
         )}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-          <Star className="w-6 h-6 text-green-600" />
+      <div className="rounded-xl border border-border p-6">
+        <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+          <Star className="w-6 h-6 text-primary" />
           Detailed Ratings
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -123,9 +123,9 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
         </div>
       </div>
 
-      <div className="rounded-xl border border-gray-200 space-y-6 p-6">
-        <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-          <Target className="w-6 h-6 text-green-600" />
+      <div className="rounded-xl border border-border space-y-6 p-6">
+        <h3 className="text-xl font-bold flex items-center gap-2">
+          <Target className="w-6 h-6 text-primary" />
           Detailed Analysis
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -138,18 +138,18 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
       </div>
 
       {result.recommendations.length > 0 && (
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200 p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <Lightbulb className="w-6 h-6 text-green-600" />
+        <div className="rounded-xl border border-primary p-6">
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+            <Lightbulb className="w-6 h-6 text-primary" />
             Key Recommendations
           </h3>
           <div className="space-y-4">
             {result.recommendations.map((recommendation, index) => (
               <div key={index} className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold">
                   {index + 1}
                 </div>
-                <p className="text-gray-700 leading-relaxed">{recommendation}</p>
+                <p className="leading-relaxed">{recommendation}</p>
               </div>
             ))}
           </div>

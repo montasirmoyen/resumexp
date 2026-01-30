@@ -102,8 +102,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             <div className="flex items-center justify-center space-x-3">
               <span className="text-2xl">{getFileIcon(selectedFile)}</span>
               <div className="text-left">
-                <div className="font-medium text-gray-900">{selectedFile.name}</div>
-                <div className="text-sm text-gray-500">{formatFileSize(selectedFile.size)}</div>
+                <div className="font-medium">{selectedFile.name}</div>
+                <div className="text-sm">{formatFileSize(selectedFile.size)}</div>
               </div>
               <button
                 onClick={removeFile}
