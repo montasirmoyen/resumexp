@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import Footer from "@/components/Footer";
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  style: ["normal", "italic"],
-  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "enhanceme",
-  description: "Your AI resume enhancer",
+  title: "ResumeXP - AI Resume Enhancer",
+  description: "Enhance your resume with AI-powered analysis and optimization.",
 };
 
 export default function RootLayout({
@@ -22,8 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nunito.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         {children}
+        <Footer />
       </body>
     </html>
   );
