@@ -1,15 +1,18 @@
-import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 import { AnalysisService } from '@/services/analysis-service';
+import { OpenRouter } from '@openrouter/sdk';
 
-const API_KEY = process.env.AI_API_KEY;
-const AI_URL = process.env.AI_URL;
-const AI_MODEL = process.env.AI_MODEL || 'gpt-4o';
+const API_KEY = process.env.OPENROUTER_API_KEY;
 const USE_MOCK_DATA = false;
+
+function extractJSON(text: string): string | null {
+  const match = text.match(/\{[\s\S]*\}/);
+  return match ? match[0] : null;
+}
 
 export async function POST(request: NextRequest) {
   try {
-    if (USE_MOCK_DATA) {
+    if (USE_MOCK_DATA) { // works
       const mockAnalysis = AnalysisService.createMockAnalysis();
       return NextResponse.json({
         success: true,
@@ -18,6 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!API_KEY) {
+      console.error('API key not configured');
       return NextResponse.json(
         { error: 'API key not configured' },
         { status: 500 }
@@ -28,75 +32,73 @@ export async function POST(request: NextRequest) {
     const { resumeText } = body ?? {};
 
     if (!resumeText) {
+      console.error('Resume text is required');
       return NextResponse.json(
         { error: 'Resume text is required' },
         { status: 400 }
       );
     }
 
-    const prompt = `Analyze the following resume and return ONLY valid JSON with both analysis and a normalized resume structure (no markdown, no prose).
-
-Required JSON schema (example values allowed):
-{
-  "ratings": { "overall": 7.5, "content": 7, "structure": 8, "formatting": 6, "keywords": 7, "achievements": 7 },
-  "deepAnalysis": {
-    "content": { "strengths": ["..."], "improvements": ["..."] },
-    "structure": { "strengths": ["..."], "improvements": ["..."] },
-    "formatting": { "strengths": ["..."], "improvements": ["..."] },
-    "keywords": { "strengths": ["..."], "improvements": ["..."] },
-    "achievements": { "strengths": ["..."], "improvements": ["..."] }
-  },
-  "recommendations": ["..."],
-  "summary": "...",
-  "overallScore": 7.5,
-  "resume": {
-    "basics": { "name": "...", "headline": "...", "email": "...", "phone": "...", "location": "...", "links": [{"label":"GitHub","url":"https://..."}], "summary": "..." },
-    "skills": [{ "name": "Backend", "keywords": ["Node.js","PostgreSQL"] }],
-    "experience": [
-      { "company": "...", "role": "...", "location": "...", "startDate": "2022-01", "endDate": "2024-03", "current": false, "bullets": ["..."] }
-    ],
-    "education": [
-      { "institution": "...", "degree": "...", "area": "...", "startDate": "2018-08", "endDate": "2022-05", "details": ["..."] }
-    ],
-    "projects": [{ "name": "...", "description": "...", "bullets": ["..."], "link": "https://..." }]
-  }
-}
-
-Respond with ONLY the JSON object.
-
-Resume Text:\n${resumeText}`;
-
-    const response = await axios.post(
-      `${AI_URL}`,
-      {
-        model: `${AI_MODEL}`,
-        messages: [
-          { role: 'system', content: 'You are an expert resume analyst. You must respond with valid JSON only, no markdown formatting, no code blocks, no explanatory text.' },
-          { role: 'user', content: prompt }
-        ],
-        max_tokens: 3000,
-        temperature: 0.3,
-        response_format: { type: 'json_object' }
+    const prompt = `
+    Analyze the following resume and return ONLY valid JSON with both analysis and a normalized resume structure (no markdown, no prose).
+    Required JSON schema (example values allowed):
+    {
+      "ratings": { "overall": 7.5, "content": 7, "structure": 8, "formatting": 6, "keywords": 7, "achievements": 7 },
+      "deepAnalysis": {
+        "content": { "strengths": ["..."], "improvements": ["..."] },
+        "structure": { "strengths": ["..."], "improvements": ["..."] },
+        "formatting": { "strengths": ["..."], "improvements": ["..."] },
+        "keywords": { "strengths": ["..."], "improvements": ["..."] },
+        "achievements": { "strengths": ["..."], "improvements": ["..."] }
       },
-      {
-        headers: {
-          'Authorization': `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-        },
+      "recommendations": ["..."],
+      "summary": "...",
+      "overallScore": 7.5,
+      "resume": {
+        "basics": { "name": "...", "headline": "...", "email": "...", "phone": "...", "location": "...", "links": [{"label":"GitHub","url":"https://..."}], "summary": "..." },
+        "skills": [{ "name": "Backend", "keywords": ["Node.js","PostgreSQL"] }],
+        "experience": [
+          { "company": "...", "role": "...", "location": "...", "startDate": "2022-01", "endDate": "2024-03", "current": false, "bullets": ["..."] }
+        ],
+        "education": [
+          { "institution": "...", "degree": "...", "area": "...", "startDate": "2018-08", "endDate": "2022-05", "details": ["..."] }
+        ],
+        "projects": [{ "name": "...", "description": "...", "bullets": ["..."], "link": "https://..." }]
       }
-    );
+    }
 
-    let rawAnalysis = response.data?.choices?.[0]?.message?.content ?? response.data?.choices?.[0]?.text;
-    
-    if (typeof rawAnalysis === 'string') {
-      rawAnalysis = rawAnalysis.trim();
-      rawAnalysis = rawAnalysis.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '');
-      rawAnalysis = rawAnalysis.trim();
+    Respond with ONLY the JSON object.
+    Resume Text: \n${resumeText}`;
+
+    const openRouter = new OpenRouter({ apiKey: API_KEY });
+
+    const completion = await openRouter.chat.send({
+      model: 'qwen/qwen3-next-80b-a3b-instruct:free',
+      messages: [
+        { role: 'system', content: 'You are an expert resume analyst. You must respond with valid JSON only, no markdown formatting, no code blocks, no explanatory text.' },
+        { role: 'user', content: prompt }
+      ],
+      responseFormat: { type: 'json_object' },
+    });
+
+    const raw = completion.choices?.[0]?.message?.content;
+    console.log('Raw AI response:', raw);
+    const text =
+      typeof raw === 'string'
+        ? raw
+        : Array.isArray(raw)
+          ? raw.map((part) => (typeof part === 'string' ? part : part.type === 'text' ? part.text : '')).join('')
+          : '';
+
+    const jsonText = extractJSON(text);
+
+    if (!jsonText) {
+      console.error('Planner returned no JSON:', text);
+      return { error: 'Failed to parse AI response. Please try again.', status: 500 };
     }
 
     try {
-      const analysis = JSON.parse(rawAnalysis);
-      
+      const analysis = JSON.parse(jsonText);
       if (!analysis.ratings || typeof analysis.ratings !== 'object') {
         throw new Error('Missing or invalid ratings object');
       }
@@ -116,15 +118,13 @@ Resume Text:\n${resumeText}`;
       });
     } catch (parseError) {
       console.error('Failed to parse AI response:', parseError);
-      console.error('Raw response was:', rawAnalysis);
+      console.error('Raw response was:', text);
       return NextResponse.json(
         { error: 'Failed to parse AI response. Please try again.' },
         { status: 500 }
       );
     }
   } catch (error: any) {
-    console.error('Error calling API:', error);
-
     if (error.response?.status === 401) {
       return NextResponse.json(
         { error: 'Invalid API key. Please check your API key.' },
@@ -140,7 +140,7 @@ Resume Text:\n${resumeText}`;
     }
 
     return NextResponse.json(
-      { error: 'Failed to analyze resume. Please try again.' },
+      { error: 'Failed to analyze resume. Please try again. ' + (error.message || '') },
       { status: 500 }
     );
   }
