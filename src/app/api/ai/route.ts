@@ -67,13 +67,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    Respond with ONLY the JSON object.
+    Respond with ONLY the JSON object, no markdown, no code blocks, no explanatory text, just the JSON.
     Resume Text: \n${resumeText}`;
 
     const openRouter = new OpenRouter({ apiKey: API_KEY });
 
     const completion = await openRouter.chat.send({
-      model: 'qwen/qwen3-next-80b-a3b-instruct:free',
+      model: 'tngtech/deepseek-r1t2-chimera:free',
       messages: [
         { role: 'system', content: 'You are an expert resume analyst. You must respond with valid JSON only, no markdown formatting, no code blocks, no explanatory text.' },
         { role: 'user', content: prompt }
