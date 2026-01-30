@@ -62,8 +62,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     <div className="w-full max-w-2xl mx-auto">
       <div
         className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200  ${selectedFile
-            ? 'border-green-300 bg-green-50'
-            : 'border-green-300 bg-green-50 hover:bg-green-100 hover:border-green-400'
+            ? 'border-primary bg-card'
+            : 'border-primary bg-card hover:bg-card/50 hover:border-primary/50'
           }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -83,16 +83,16 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         {!selectedFile ? (
           <label htmlFor="resumeUpload" className="cursor-pointer">
             <div className="flex flex-col items-center space-y-4">
-              <div className="p-4 bg-green-400/75 rounded-full">
-                <Upload className="w-8 h-8 text-white" />
+              <div className="p-4 bg-primary rounded-full">
+                <Upload className="w-8 h-8" />
               </div>
               <div className="text-center space-y-2">
-                <h3 className="text-lg font-semibold text-gray-900">Upload Your Resume</h3>
-                <p className="text-gray-600">Drop your resume here or choose a file.</p>
-                <div id="uploadHelp" className="text-sm text-gray-500">PDF, DOCX, or TXT. Max 10MB.</div>
-                <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <LockIcon className="w-4 h-4 flex-shrink-0 text-black" />
-                  <span className="text-black">Privacy guaranteed. Your file is never stored.</span>
+                <h3 className="text-lg font-semibold">Upload Your Resume</h3>
+                <p>Drop your resume here or choose a file.</p>
+                <div id="uploadHelp" className="text-sm">PDF, DOCX, or TXT. Max 10MB.</div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <LockIcon className="w-4 h-4 flex-shrink-0" />
+                  <span>Privacy guaranteed. Your file is never stored.</span>
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             <button
               onClick={onAnalyze}
               disabled={isAnalyzing}
-              className="w-full px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full px-6 py-3 bg-primary text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               aria-busy={isAnalyzing}
               aria-live="polite"
             >
