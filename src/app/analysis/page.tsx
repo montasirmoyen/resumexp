@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { AnalysisResult } from '@/types/analysis';
-import { AnalysisDisplay } from '@/components/analysis-display';
+import { AnalysisDisplay } from '@/components/AnalysisDisplay';
 import { AnalysisService } from '@/services/analysis-service';
-import { ResumePreview } from '@/components/resume-preview';
+import { ResumePreview } from '@/components/ResumePreview';
 import { computeJdMatch, scoreInterviewLikelihood, atsChecks } from '@/services/scoring';
 
 export default function AnalysisPage() {
