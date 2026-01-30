@@ -89,8 +89,8 @@ export class AnalysisService {
           summary: "Developer with 4+ years building web apps with React, Node.js, and cloud."
         },
         skills: [
-          { name: "Frontend", keywords: ["React","Next.js","TypeScript"] },
-          { name: "Backend", keywords: ["Node.js","Express","PostgreSQL"] }
+          { name: "Frontend", keywords: ["React", "Next.js", "TypeScript"] },
+          { name: "Backend", keywords: ["Node.js", "Express", "PostgreSQL"] }
         ],
         experience: [
           {
@@ -127,10 +127,10 @@ export class AnalysisService {
       }
     };
   }
-  
+
   private static async extractTextFromFile(file: File): Promise<string> {
     const fileType = file.type;
-    
+
     if (fileType === 'application/pdf') {
       const pdfToText = (await import('react-pdftotext')).default;
       return await pdfToText(file);
@@ -149,7 +149,7 @@ export class AnalysisService {
   static async analyzeResume(file: File): Promise<AnalysisResult> {
     try {
       const resumeText = await this.extractTextFromFile(file);
-      
+
       if (!resumeText.trim()) {
         throw new Error('No text could be extracted from the file');
       }
@@ -163,8 +163,8 @@ export class AnalysisService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || 'Failed to fetch response');
       }
 
       const data: ApiResponse = await response.json();
@@ -175,7 +175,7 @@ export class AnalysisService {
 
       try {
         sessionStorage.setItem('lastResumeText', resumeText);
-      } catch {}
+      } catch { }
       return data.analysis;
     } catch (error) {
       console.error('Analysis failed:', error);
