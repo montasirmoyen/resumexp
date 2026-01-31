@@ -67,28 +67,15 @@ export default function AnalysisPage() {
                 Analyze another resume
               </button>
             </div>
-            <AnalysisDisplay result={result} />
 
-            <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="rounded-xl border border-border p-6">
-                <h3 className="text-xl font-bold mb-4">ATS Checks</h3>
-                <ul className="space-y-2">
-                  {atsChecks(resumeText).map((c, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm">
-                      <span className={`w-2 h-2 rounded-full ${c.passed ? 'bg-green-600' : 'bg-amber-500'}`}></span>
-                      <span className={c.passed ? '' : 'text-amber-700'}>{c.label}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <AnalysisDisplay result={result} resumeText={resumeText} />
 
-            {result?.resume && (
+            {/*{result?.resume && (
               <div className="mt-10">
                 <h3 className="text-2xl font-bold mb-4">Rebuilt Resume Preview</h3>
                 <ResumePreview resume={result.resume} />
               </div>
-            )}
+            )}*/}
           </div>
         )}
       </section>
