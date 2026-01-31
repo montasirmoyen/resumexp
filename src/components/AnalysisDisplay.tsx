@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { AnalysisResult } from '@/types/analysis';
-import { Star, TrendingUp, Target, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react';
+import { Star, TrendingUp, Target, CheckCircle, AlertCircle, Lightbulb, Monitor } from 'lucide-react';
+import { atsChecks } from '@/services/scoring';
 
 interface AnalysisDisplayProps {
   result: AnalysisResult;
@@ -16,8 +17,8 @@ const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
   const percentage = (value / max) * 100;
   const getColor = (val: number) => {
     if (val >= 8) return 'bg-positive';
-    if (val >= 6) return 'bg-caution';
-    return 'bg-destructive';
+    if (val >= 6) return 'bg-positive/50';
+    return 'bg-positive/25';
   };
 
   return (
@@ -79,7 +80,7 @@ const SectionAnalysis: React.FC<{
   </div>
 );
 
-export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
+export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: string }> = ({ result, resumeText }) => {
   const getOverallScoreColor = (score: number) => {
     if (score >= 8) return 'text-green-600';
     if (score >= 6) return 'text-yellow-600';
@@ -99,7 +100,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
               <p>Based on comprehensive analysis</p>
             </div>
           </div>
-          <div className={`text-4xl font-black ${getOverallScoreColor(result.overallScore)}`}>
+          <div className="text-4xl font-black">
             {result.overallScore} / 10
           </div>
         </div>
@@ -137,6 +138,23 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
         </div>
       </div>
 
+      <div className="mt-10 grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <div className={`rounded-xl border p-6 ${atsChecks(resumeText).every(c => c.passed) ? 'border-primary' : 'border-caution'}`}>
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+            <Monitor className={`w-6 h-6 text-primary ${atsChecks(resumeText).every(c => c.passed) ? 'text-primary' : 'text-caution'}`} />
+            ATS Compliance Checks
+          </h3>
+          <ul className="space-y-2">
+            {atsChecks(resumeText).map((c, i) => (
+              <li key={i} className="flex items-center gap-2 text-sm">
+                <span className={`w-2 h-2 rounded-full ${c.passed ? 'bg-green-600' : 'bg-caution'}`}></span>
+                <span className={c.passed ? '' : 'text-caution'}>{c.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
       {result.recommendations.length > 0 && (
         <div className="rounded-xl border border-primary p-6">
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
@@ -145,7 +163,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
           </h3>
           <div className="space-y-2">
             {result.recommendations.map((recommendation, index) => (
-              <div key={index} className="flex bg-primary items-start gap-3 border border-border rounded-lg p-2">
+              <div key={index} className="flex items-start gap-3 border-b border-border p-2">
                 <div className="flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold">
                   {index + 1}
                 </div>
