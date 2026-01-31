@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AnalysisService } from '@/services/analysis-service';
 import { OpenRouter } from '@openrouter/sdk';
 
+const AI_MODEL = 'tngtech/deepseek-r1t2-chimera:free';
 const API_KEY = process.env.OPENROUTER_API_KEY;
 const USE_MOCK_DATA = false;
 
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const PREFIX_PROMPT = 'You are an expert resume analyst. You must respond with valid JSON only, no markdown formatting, no code blocks, no explanatory text.';
     const prompt = `
     Analyze the following resume and return ONLY valid JSON with both analysis and a normalized resume structure (no markdown, no prose).
     Required JSON schema (example values allowed):
@@ -68,17 +70,18 @@ export async function POST(request: NextRequest) {
     }
 
     Respond with ONLY the JSON object, no markdown, no code blocks, no explanatory text, just the JSON.
+    You must edit the JSON values based on the resume, don't just give me the example above.
     Resume Text: \n${resumeText}`;
 
     const openRouter = new OpenRouter({ apiKey: API_KEY });
 
     const completion = await openRouter.chat.send({
-      model: 'tngtech/deepseek-r1t2-chimera:free',
+      model: AI_MODEL,
       messages: [
-        { role: 'system', content: 'You are an expert resume analyst. You must respond with valid JSON only, no markdown formatting, no code blocks, no explanatory text.' },
+        { role: 'system', content: PREFIX_PROMPT },
         { role: 'user', content: prompt }
       ],
-      responseFormat: { type: 'json_object' },
+      temperature: 0.2,
     });
 
     const raw = completion.choices?.[0]?.message?.content;
