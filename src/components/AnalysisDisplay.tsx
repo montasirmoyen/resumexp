@@ -15,9 +15,9 @@ const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
 }) => {
   const percentage = (value / max) * 100;
   const getColor = (val: number) => {
-    if (val >= 8) return 'bg-green-500';
-    if (val >= 6) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (val >= 8) return 'bg-positive';
+    if (val >= 6) return 'bg-caution';
+    return 'bg-destructive';
   };
 
   return (
@@ -26,7 +26,7 @@ const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
         <span className="text-sm font-medium">{label}</span>
         <span className="text-sm font-bold">{value}/{max}</span>
       </div>
-      <div className="w-full rounded-full h-2">
+      <div className="w-full rounded-full h-2 bg-black">
         <div
           className={`h-2 rounded-full transition-all duration-500 ${getColor(value)}`}
           style={{ width: `${percentage}%` }}
@@ -46,8 +46,8 @@ const SectionAnalysis: React.FC<{
     {section.strengths.length > 0 && (
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-3">
-          <CheckCircle className="w-5 h-5 text-primary" />
-          <h5 className="font-medium text-primary">Strengths</h5>
+          <CheckCircle className="w-5 h-5 text-positive" />
+          <h5 className="font-medium text-positive">Strengths</h5>
         </div>
         <ul className="space-y-2">
           {section.strengths.map((strength, index) => (
@@ -63,8 +63,8 @@ const SectionAnalysis: React.FC<{
     {section.improvements.length > 0 && (
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <AlertCircle className="w-5 h-5 text-amber-500" />
-          <h5 className="font-medium text-amber-700">Areas for Improvement</h5>
+          <AlertCircle className="w-5 h-5 text-caution" />
+          <h5 className="font-medium text-caution">Areas for Improvement</h5>
         </div>
         <ul className="space-y-2">
           {section.improvements.map((improvement, index) => (
@@ -143,9 +143,9 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ result }) => {
             <Lightbulb className="w-6 h-6 text-primary" />
             Key Recommendations
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-2">
             {result.recommendations.map((recommendation, index) => (
-              <div key={index} className="flex items-start gap-3">
+              <div key={index} className="flex bg-primary items-start gap-3 border border-border rounded-lg p-2">
                 <div className="flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold">
                   {index + 1}
                 </div>

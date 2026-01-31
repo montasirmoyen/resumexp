@@ -8,11 +8,9 @@ import { AnalysisDisplay } from '@/components/AnalysisDisplay';
 import { AnalysisService } from '@/services/analysis-service';
 import { ResumePreview } from '@/components/ResumePreview';
 import { computeJdMatch, scoreInterviewLikelihood, atsChecks } from '@/services/scoring';
+import Navbar from '@/components/Navbar';
 
 export default function AnalysisPage() {
-  React.useEffect(() => {
-    document.title = 'enhanceme - Analysis';
-  }, []);
   const router = useRouter();
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [role, setRole] = useState('');
@@ -29,7 +27,7 @@ export default function AnalysisPage() {
       }
       const txt = sessionStorage.getItem('lastResumeText');
       if (txt) setResumeText(txt);
-    } catch {}
+    } catch { }
   }, []);
 
   useEffect(() => {
@@ -41,26 +39,9 @@ export default function AnalysisPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="flex items-center">
-              <Image className="p-2" src="/logo.png" alt="Sparkle" width={50} height={50} />
-              <h1 className="text-2xl font-bold">enhanceme</h1>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => router.push('/')}
-                className="px-4 py-2 text-primary-700 hover:text-primary-800 hover:bg-green-50 rounded-lg transition-colors"
-              >
-                Back home
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-18">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-18">
         {!result ? (
           <div className="max-w-2xl mx-auto text-center py-16">
             <h2 className="text-2xl font-semibold mb-2">No analysis yet</h2>
@@ -110,18 +91,7 @@ export default function AnalysisPage() {
             )}
           </div>
         )}
-      </main>
-
-      <footer className="border-t border-border bg-card mt-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center gap-2">
-              <Image src="/sparkle.png" alt="Sparkle" width={30} height={30} className="align-middle" />
-              <p className="m-0">&copy; 2025 enhanceme</p>
-            </div>
-          </div>
-        </div>
-      </footer>
+      </section>
     </div>
   );
 }
