@@ -111,39 +111,86 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const PREFIX_PROMPT = 'You are an expert resume analyst. You must respond with valid JSON only, no markdown formatting, no code blocks, no explanatory text.';
+    const PREFIX_PROMPT = `
+    You are an expert resume analyst.
+    Respond with valid JSON only.
+    No markdown, no code blocks, no explanations, no commentary.
+    `;
+
     const prompt = `
-    Analyze the following resume and return ONLY valid JSON with both analysis and a normalized resume structure (no markdown, no prose).
-    Required JSON schema (example values allowed):
+    Analyze the following resume and return ONLY valid JSON that follows the exact schema below. 
+    Do not include markdown, prose, or any text outside the JSON object.
+
+    Required JSON schema (example keys only, not example values):
+
     {
-      "ratings": { "overall": 7.5, "content": 7, "structure": 8, "formatting": 6, "keywords": 7, "achievements": 7 },
-      "deepAnalysis": {
-        "content": { "strengths": ["..."], "improvements": ["..."] },
-        "structure": { "strengths": ["..."], "improvements": ["..."] },
-        "formatting": { "strengths": ["..."], "improvements": ["..."] },
-        "keywords": { "strengths": ["..."], "improvements": ["..."] },
-        "achievements": { "strengths": ["..."], "improvements": ["..."] }
+      "ratings": {
+        "overall": number,
+        "content": number,
+        "structure": number,
+        "readability": number,
+        "keywords": number,
+        "achievements": number,
+        "professionalism": number
       },
-      "recommendations": ["..."],
-      "summary": "...",
-      "overallScore": 7.5,
+      "deepAnalysis": {
+        "content": { "strengths": string[], "improvements": string[] },
+        "structure": { "strengths": string[], "improvements": string[] },
+        "readability": { "strengths": string[], "improvements": string[] },
+        "keywords": { "strengths": string[], "improvements": string[] },
+        "achievements": { "strengths": string[], "improvements": string[] },
+        "professionalism": { "strengths": string[], "improvements": string[] }
+      },
+      "recommendations": string[],
+      "summary": string,
+      "overallScore": number,
       "resume": {
-        "basics": { "name": "...", "headline": "...", "email": "...", "phone": "...", "location": "...", "links": [{"label":"GitHub","url":"https://..."}], "summary": "..." },
-        "skills": [{ "name": "Backend", "keywords": ["Node.js","PostgreSQL"] }],
-        "experience": [
-          { "company": "...", "role": "...", "location": "...", "startDate": "2022-01", "endDate": "2024-03", "current": false, "bullets": ["..."] }
-        ],
-        "education": [
-          { "institution": "...", "degree": "...", "area": "...", "startDate": "2018-08", "endDate": "2022-05", "details": ["..."] }
-        ],
-        "projects": [{ "name": "...", "description": "...", "bullets": ["..."], "link": "https://..." }]
+        "basics": {
+          "name": string,
+          "headline": string | null,
+          "email": string | null,
+          "phone": string | null,
+          "location": string | null,
+          "links": { "label": string, "url": string }[] | null,
+          "summary": string | null
+        },
+        "skills": { "name": string, "level": string | null, "keywords": string[] | null }[],
+        "experience": {
+          "company": string,
+          "role": string,
+          "location": string | null,
+          "startDate": string | null,
+          "endDate": string | null,
+          "current": boolean | null,
+          "bullets": string[]
+        }[],
+        "education": {
+          "institution": string,
+          "degree": string | null,
+          "area": string | null,
+          "startDate": string | null,
+          "endDate": string | null,
+          "details": string[] | null
+        }[],
+        "projects": {
+          "name": string,
+          "description": string | null,
+          "bullets": string[] | null,
+          "link": string | null
+        }[] | null
       }
     }
 
-    In the "summary" field, use words "you" and "your" to directly address the user.
-    Respond with ONLY the JSON object, no markdown, no code blocks, no explanatory text, just the JSON.
-    You must edit the JSON values based on the resume, don't just give me the example above.
-    Now here is the raw resume text: \n${resumeText}`;
+    Important rules:
+    - Never reuse example numbers or placeholder values. All ratings and analysis must be based on the resume text.
+    - The "summary" field must directly address the user using "you" and "your".
+    - The JSON must be complete and strictly follow the schema.
+    - Do not add fields that are not in the schema.
+    - Do not output anything before or after the JSON.
+
+    Now analyze the following raw resume text:
+    ${resumeText}
+    `;
 
     const openRouter = new OpenRouter({ apiKey: API_KEY });
 
