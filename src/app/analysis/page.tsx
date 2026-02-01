@@ -2,13 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { AnalysisResult } from '@/types/analysis';
 import { AnalysisDisplay } from '@/components/AnalysisDisplay';
-import { AnalysisService } from '@/services/analysis-service';
-import { ResumePreview } from '@/components/ResumePreview';
-import { computeJdMatch, scoreInterviewLikelihood, atsChecks } from '@/services/scoring';
-import Navbar from '@/components/Navbar';
+import { computeJdMatch } from '@/services/scoring';
 
 export default function AnalysisPage() {
   const router = useRouter();
@@ -39,8 +35,6 @@ export default function AnalysisPage() {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
-
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-18">
         {!result ? (
           <div className="max-w-2xl mx-auto text-center py-16">
