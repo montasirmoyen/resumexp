@@ -4,80 +4,93 @@ export class AnalysisService {
   static createMockAnalysis(): AnalysisResult {
     return {
       ratings: {
-        overall: 7,
-        content: 8,
+        overall: 7.2,
+        content: 7,
         structure: 6,
-        formatting: 7,
-        keywords: 8,
-        achievements: 6
+        readability: 6,
+        keywords: 5,
+        achievements: 4,
+        professionalism: 7
       },
       deepAnalysis: {
         content: {
           strengths: [
-            "Clear and concise job descriptions",
-            "Good use of action verbs",
-            "Relevant experience highlighted"
+            "Experience descriptions are clear and easy to follow",
+            "Strong use of action verbs across bullet points",
+            "Relevant technical stack is consistently referenced"
           ],
           improvements: [
-            "Add more quantifiable achievements",
-            "Include specific metrics and results",
-            "Expand on technical skills"
+            "Add more detail to project descriptions",
+            "Include context for responsibilities in earlier roles",
+            "Expand the summary to better frame your strengths"
           ]
         },
         structure: {
           strengths: [
-            "Logical flow from experience to education",
-            "Consistent formatting throughout"
+            "Sections follow a logical order",
+            "Experience is listed in reverse chronological order"
           ],
           improvements: [
-            "Consider adding a professional summary",
-            "Reorganize sections for better impact",
-            "Add more white space for readability"
+            "Consider adding a dedicated skills section near the top",
+            "Group related technologies together for easier scanning",
+            "Add clearer separation between sections"
           ]
         },
-        formatting: {
+        readability: {
           strengths: [
-            "Clean, professional layout",
-            "Consistent font usage"
+            "Bullet points are generally concise",
+            "Technical terms are used appropriately"
           ],
           improvements: [
-            "Improve bullet point formatting",
-            "Add section dividers",
-            "Optimize for ATS systems"
+            "Shorten longer bullets to improve scanning",
+            "Ensure consistent tense across all experience entries",
+            "Break up dense sections to improve flow"
           ]
         },
         keywords: {
           strengths: [
-            "Industry-relevant terminology used",
-            "Technical skills clearly listed"
+            "Includes core technologies like React, Node.js and PostgreSQL",
+            "Uses common engineering action verbs"
           ],
           improvements: [
-            "Include more job-specific keywords",
-            "Add soft skills section",
-            "Use variations of key terms"
+            "Add more role-specific keywords for targeted positions",
+            "Include cloud-related terms if applicable",
+            "Incorporate soft skills that align with job descriptions"
           ]
         },
         achievements: {
           strengths: [
-            "Some quantified results included"
+            "Includes at least one quantified metric",
+            "Shows ownership of meaningful engineering tasks"
           ],
           improvements: [
-            "Add more specific metrics",
-            "Include percentage improvements",
-            "Highlight cost savings or revenue generated"
+            "Add more measurable outcomes across roles",
+            "Highlight performance improvements or efficiency gains",
+            "Include metrics for project impact when possible"
+          ]
+        },
+        professionalism: {
+          strengths: [
+            "Tone is consistent and appropriate for technical roles",
+            "No grammatical or stylistic issues detected"
+          ],
+          improvements: [
+            "Add a more polished headline to strengthen first impression",
+            "Refine the summary to sound more confident and focused",
+            "Ensure all bullets follow a consistent writing style"
           ]
         }
       },
       recommendations: [
-        "Add a professional summary at the top to immediately capture attention",
-        "Quantify your achievements with specific numbers and percentages",
-        "Include more industry-specific keywords to pass ATS screening",
-        "Consider adding a skills section with both technical and soft skills",
-        "Use bullet points consistently and keep them concise",
-        "Add any relevant certifications or professional development"
+        "Add more quantifiable achievements to strengthen impact",
+        "Refine the summary to better highlight your strengths",
+        "Include more targeted keywords for the roles you want",
+        "Reorganize sections to improve scanning and clarity",
+        "Ensure consistent tense and tone across all bullets"
       ],
-      summary: "[MOCK-DATA] Your resume shows good potential with clear experience and relevant skills. The main areas for improvement are adding more quantifiable achievements and optimizing for ATS systems. With some strategic enhancements, this resume will be much more competitive.",
-      overallScore: 5,
+      summary:
+        "[MOCK-DATA] Your resume shows strong technical experience and a solid foundation. Improving clarity, adding more measurable achievements and refining your summary will make your resume more competitive.",
+      overallScore: 7.2,
       resume: {
         basics: {
           name: "Alex Candidate",
@@ -86,7 +99,8 @@ export class AnalysisService {
           phone: "+1 (555) 555-5555",
           location: "Remote",
           links: [{ label: "GitHub", url: "https://github.com/example" }],
-          summary: "Developer with 4+ years building web apps with React, Node.js, and cloud."
+          summary:
+            "Full-stack developer with 4+ years of experience building scalable web applications using React, Node.js and cloud technologies."
         },
         skills: [
           { name: "Frontend", keywords: ["React", "Next.js", "TypeScript"] },
@@ -101,8 +115,9 @@ export class AnalysisService {
             endDate: "2024-03",
             current: false,
             bullets: [
-              "Built features in React/Next.js improving conversion by 12%",
-              "Led migration to PostgreSQL with zero downtime"
+              "Developed new features in React and Next.js improving conversion by 12 percent",
+              "Led migration to PostgreSQL with zero downtime",
+              "Collaborated with cross-functional teams to deliver product updates"
             ]
           }
         ],
@@ -113,20 +128,21 @@ export class AnalysisService {
             area: "Computer Science",
             startDate: "2018-08",
             endDate: "2022-05",
-            details: ["GPA 3.7/4.0"]
+            details: ["GPA 3.7 out of 4.0"]
           }
         ],
         projects: [
           {
             name: "Portfolio",
             description: "Personal portfolio with blog",
-            bullets: ["SEO-optimized, responsive design"],
+            bullets: ["SEO optimized and fully responsive design"],
             link: "https://example.com"
           }
         ]
       }
     };
   }
+
 
   private static async extractTextFromFile(file: File): Promise<string> {
     const fileType = file.type;

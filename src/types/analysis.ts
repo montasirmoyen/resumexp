@@ -1,10 +1,11 @@
 export interface AnalysisRatings {
-  overall: number;
-  content: number;
-  structure: number;
-  formatting: number;
-  keywords: number;
-  achievements: number;
+  overall: number,
+  content: number,
+  structure: number,
+  readability: number,
+  keywords: number,
+  achievements: number,
+  professionalism: number
 }
 
 export interface AnalysisSection {
@@ -15,9 +16,10 @@ export interface AnalysisSection {
 export interface DeepAnalysis {
   content: AnalysisSection;
   structure: AnalysisSection;
-  formatting: AnalysisSection;
+  readability: AnalysisSection;
   keywords: AnalysisSection;
   achievements: AnalysisSection;
+  professionalism: AnalysisSection;
 }
 
 export interface AnalysisResult {
