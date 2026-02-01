@@ -56,9 +56,9 @@ export default function AnalysisPage() {
               </div>
               <button
                 onClick={() => router.push('/dashboard')}
-                className="px-4 py-2 text-primary hover:text-primary/50 hover:bg-primary/50 rounded-lg transition-colors"
+                className="px-4 py-2 rounded-lg font-semibold bg-primary text-background hover:bg-primary/25 hover:text-primary transition-colors duration-200"
               >
-                Analyze another resume
+                Analyze Another Resume
               </button>
             </div>
 
