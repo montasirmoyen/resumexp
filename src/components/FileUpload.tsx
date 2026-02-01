@@ -2,7 +2,6 @@
 
 import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, File, X, AlertCircle, LockIcon } from 'lucide-react';
-import { CircularProgress } from "@heroui/progress";
 
 interface FileUploadProps {
   selectedFile: File | null;
