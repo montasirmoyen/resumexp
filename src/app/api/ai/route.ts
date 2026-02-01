@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AnalysisService } from '@/services/analysis-service';
 import { OpenRouter } from '@openrouter/sdk';
 
-const AI_MODEL = 'tngtech/deepseek-r1t2-chimera:free';
+const AI_MODEL = 'tngtech/deepseek-r1t-chimera:free';
 const API_KEY = process.env.OPENROUTER_API_KEY;
 const USE_MOCK_DATA = false;
 
@@ -69,9 +69,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    In the "summary" field, use words "you" and "your" to directly address the user.
     Respond with ONLY the JSON object, no markdown, no code blocks, no explanatory text, just the JSON.
     You must edit the JSON values based on the resume, don't just give me the example above.
-    Resume Text: \n${resumeText}`;
+    Now here is the raw resume text: \n${resumeText}`;
 
     const openRouter = new OpenRouter({ apiKey: API_KEY });
 
