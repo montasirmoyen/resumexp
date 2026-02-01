@@ -62,8 +62,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     <div className="w-full max-w-2xl mx-auto">
       <div
         className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200  ${selectedFile
-            ? 'border-primary bg-card'
-            : 'border-primary bg-card hover:bg-card/50 hover:border-primary/50'
+          ? 'border-primary/50 bg-card'
+          : 'border-primary/50 bg-card hover:bg-dark/25 hover:border-primary'
           }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -83,8 +83,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         {!selectedFile ? (
           <label htmlFor="resumeUpload" className="cursor-pointer">
             <div className="flex flex-col items-center space-y-4">
-              <div className="p-4 bg-primary rounded-full">
-                <Upload className="w-8 h-8" />
+              <div className="p-4 bg-dark rounded-full">
+                <Upload className="w-8 h-8 text-primary" />
               </div>
               <div className="text-center space-y-2">
                 <h3 className="text-lg font-semibold">Upload Your Resume</h3>
