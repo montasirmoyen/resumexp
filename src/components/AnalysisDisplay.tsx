@@ -141,7 +141,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
       <div className="mt-10 grid grid-cols-1 lg:grid-cols-1 gap-6">
         <div className={`rounded-xl border p-6 ${atsChecks(resumeText).every(c => c.passed) ? 'border-primary' : 'border-caution'}`}>
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-            <Monitor className={`w-6 h-6 text-primary ${atsChecks(resumeText).every(c => c.passed) ? 'text-primary' : 'text-caution'}`} />
+            <Monitor className={`w-6 h-6 ${atsChecks(resumeText).every(c => c.passed) ? 'text-primary' : 'text-caution'}`} />
             ATS Compliance Checks
           </h3>
           <ul className="space-y-2">
