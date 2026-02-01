@@ -118,7 +118,8 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <RatingBar label="Content Quality" value={result.ratings.content} />
           <RatingBar label="Structure" value={result.ratings.structure} />
-          <RatingBar label="Formatting" value={result.ratings.formatting} />
+          <RatingBar label="Readability" value={result.ratings.readability} />
+          <RatingBar label="Professionalism" value={result.ratings.professionalism} />
           <RatingBar label="Keywords" value={result.ratings.keywords} />
           <RatingBar label="Achievements" value={result.ratings.achievements} />
         </div>
@@ -132,7 +133,8 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <SectionAnalysis title="Content Analysis" section={result.deepAnalysis.content} />
           <SectionAnalysis title="Structure Analysis" section={result.deepAnalysis.structure} />
-          <SectionAnalysis title="Formatting Analysis" section={result.deepAnalysis.formatting} />
+          <SectionAnalysis title="Readability Analysis" section={result.deepAnalysis.readability} />
+          <SectionAnalysis title="Professionalism Analysis" section={result.deepAnalysis.professionalism} />
           <SectionAnalysis title="Keywords Analysis" section={result.deepAnalysis.keywords} />
           <SectionAnalysis title="Achievements Analysis" section={result.deepAnalysis.achievements} />
         </div>
