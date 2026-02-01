@@ -2,13 +2,84 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AnalysisService } from '@/services/analysis-service';
 import { OpenRouter } from '@openrouter/sdk';
 
-const AI_MODEL = 'tngtech/deepseek-r1t-chimera:free';
+let AI_MODEL = 'tngtech/deepseek-r1t-chimera:free';
+const AVAILABLE_MODELS = [
+  'tngtech/deepseek-r1t-chimera:free',
+  'nvidia/nemotron-3-nano-30b-a3b:free',
+  'arcee-ai/trinity-mini:free',
+  'tngtech/deepseek-r1t2-chimera:free',
+];
+function changeModel() {
+  const otherModels = AVAILABLE_MODELS.filter((m) => m !== AI_MODEL);
+  const randomIndex = Math.floor(Math.random() * otherModels.length);
+  AI_MODEL = otherModels[randomIndex];
+}
 const API_KEY = process.env.OPENROUTER_API_KEY;
 const USE_MOCK_DATA = false;
+const PROVIDER_ERROR_MESSAGE = 'Provider returned error';
 
 function extractJSON(text: string): string | null {
   const match = text.match(/\{[\s\S]*\}/);
   return match ? match[0] : null;
+}
+
+function isProviderError(error: any): boolean {
+  const message =
+    error?.message ||
+    error?.response?.data?.error?.message ||
+    error?.response?.data?.message ||
+    error?.error?.message;
+  return typeof message === 'string' && message.includes(PROVIDER_ERROR_MESSAGE);
+}
+
+async function sendWithProviderRetry(
+  openRouter: OpenRouter,
+  payload: Parameters<OpenRouter['chat']['send']>[0]
+) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      return await openRouter.chat.send(payload);
+    } catch (error) {
+      if (isProviderError(error) && attempt < 2) {
+        continue;
+      }
+
+      if (isProviderError(error)) {
+        break;
+      }
+
+      throw error;
+    }
+  }
+
+  changeModel();
+
+  return openRouter.chat.send(payload);
+}
+
+function extractCompletionText(completion: unknown): string {
+  if (completion && typeof completion === 'object' && 'choices' in completion) {
+    const typed = completion as { choices?: Array<{ message?: { content?: unknown } }> };
+    const raw = typed.choices?.[0]?.message?.content;
+
+    if (typeof raw === 'string') {
+      return raw;
+    }
+
+    if (Array.isArray(raw)) {
+      return raw
+        .map((part) =>
+          typeof part === 'string'
+            ? part
+            : part && typeof part === 'object' && 'type' in part && part.type === 'text' && 'text' in part
+              ? String((part as { text?: unknown }).text ?? '')
+              : ''
+        )
+        .join('');
+    }
+  }
+
+  throw new Error('Unexpected AI response type');
 }
 
 export async function POST(request: NextRequest) {
@@ -76,7 +147,7 @@ export async function POST(request: NextRequest) {
 
     const openRouter = new OpenRouter({ apiKey: API_KEY });
 
-    const completion = await openRouter.chat.send({
+    const completion = await sendWithProviderRetry(openRouter, {
       model: AI_MODEL,
       messages: [
         { role: 'system', content: PREFIX_PROMPT },
@@ -85,14 +156,8 @@ export async function POST(request: NextRequest) {
       temperature: 0.2,
     });
 
-    const raw = completion.choices?.[0]?.message?.content;
-    console.log('Raw AI response:', raw);
-    const text =
-      typeof raw === 'string'
-        ? raw
-        : Array.isArray(raw)
-          ? raw.map((part) => (typeof part === 'string' ? part : part.type === 'text' ? part.text : '')).join('')
-          : '';
+    const text = extractCompletionText(completion);
+    console.log('Raw AI response:', text);
 
     const jsonText = extractJSON(text);
 
