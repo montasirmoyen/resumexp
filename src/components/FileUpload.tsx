@@ -6,7 +6,7 @@ import { Upload, File, X, AlertCircle, LockIcon } from 'lucide-react';
 interface FileUploadProps {
   selectedFile: File | null;
   onFileSelect: (file: File | null) => void;
-  onAnalyze: () => void;
+  onAnalyze: (jobDescription?: string) => void;
   isAnalyzing: boolean;
   error: string | null;
 }
@@ -21,6 +21,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const [elapsedTime, setElapsedTime] = useState(0);
   const [currentMessage, setCurrentMessage] = useState('Extracting your resume…');
   const [messageOpacity, setMessageOpacity] = useState(1);
+  const [jobDescription, setJobDescription] = useState('');
 
   useEffect(() => {
     if (!isAnalyzing) {
@@ -152,42 +153,67 @@ export const FileUpload: React.FC<FileUploadProps> = ({
               </div>
             </label>
           ) : (
-            <div className="space-y-4">
-
-              <div className="flex items-center justify-center space-x-3">
-                <File />
-                <div className="text-left">
-                  <div className="font-medium">{selectedFile.name}</div>
-                  <div className="text-sm">{formatFileSize(selectedFile.size)}</div>
+            <div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-center space-x-3">
+                  <File />
+                  <div className="text-left">
+                    <div className="font-medium">{selectedFile.name}</div>
+                    <div className="text-sm">{formatFileSize(selectedFile.size)}</div>
+                  </div>
+                  <button
+                    onClick={removeFile}
+                    disabled={isAnalyzing}
+                    className="p-1 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
+
                 <button
-                  onClick={removeFile}
+                  onClick={() => onAnalyze(jobDescription.trim() || undefined)}
                   disabled={isAnalyzing}
-                  className="p-1 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                  className="w-full px-6 py-3 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  aria-busy={isAnalyzing}
+                  aria-live="polite"
                 >
-                  <X className="w-5 h-5" />
+                  {isAnalyzing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Analyzing Resume...
+                    </>
+                  ) : (
+                    <>
+                      <File className="w-4 h-4" />
+                      Analyze Resume
+                    </>
+                  )}
                 </button>
               </div>
 
-              <button
-                onClick={onAnalyze}
-                disabled={isAnalyzing}
-                className="w-full px-6 py-3 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                aria-busy={isAnalyzing}
-                aria-live="polite"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Analyzing Resume...
-                  </>
-                ) : (
-                  <>
-                    <File className="w-4 h-4" />
-                    Analyze Resume
-                  </>
-                )}
-              </button>
+              {/* Job Description Input */}
+              <div className="space-y-2 mt-6">
+                <p className="font-bold"> (Optional) Job Description </p>
+                <p className="text-sm">
+                  Paste a job description to get a job match score and tailored suggestions.
+                </p>
+                <div>
+                  <textarea
+                    id="jobDescription"
+                    name="jobDescription"
+                    value={jobDescription}
+                    onChange={(e) => setJobDescription(e.target.value.slice(0, 3000))}
+                    maxLength={3000}
+                    rows={6}
+                    className="w-full rounded-lg border border-border bg-background px-4 py-2 text-sm"
+                    placeholder="Paste job description here (max 3000 characters)..."
+                    disabled={isAnalyzing}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1 text-right">
+                    {jobDescription.length} / 3000 characters
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>

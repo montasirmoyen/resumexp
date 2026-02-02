@@ -1,7 +1,10 @@
 "use client";
 
-import { Star, Lightbulb, Book } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { AuroraText } from "@/components/ui/aurora-text"
+import { LayersIcon } from "@/components/ui/layers"
+import { ZapIcon } from "@/components/ui/zap"
+import { ShieldCheckIcon } from "@/components/ui/shield-check"
 
 export default function Home() {
   const router = useRouter();
@@ -18,7 +21,7 @@ export default function Home() {
             Maximize Your Resume with an {' '}
             <br />
             <span className="text-primary">
-              AI-Powered Expert
+              <AuroraText>AI-Powered Expert</AuroraText>
             </span>
           </h2>
           <p className="font-medium text-lg max-w-3xl mx-auto mb-6">
@@ -37,7 +40,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
           <div className="flex flex-col items-center p-8 rounded-2xl bg-card border border-primary shadow-sm hover:shadow-md transition-shadow">
             <div className="p-4 rounded-full bg-dark mb-6">
-              <Book className="w-8 h-8 text-primary" />
+              <LayersIcon className="text-primary" />
             </div>
             <h3 className="text-xl font-semibold mb-3">Honest Ratings</h3>
             <p className="text-center leading-relaxed">
@@ -47,21 +50,21 @@ export default function Home() {
 
           <div className="flex flex-col items-center p-8 rounded-2xl bg-card border border-primary shadow-sm hover:shadow-md transition-shadow">
             <div className="p-4 rounded-full bg-dark mb-6">
-              <Lightbulb className="w-8 h-8 text-primary" />
+              <ZapIcon className="text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Smart Analysis</h3>
+            <h3 className="text-xl font-semibold mb-3">Job Match</h3>
             <p className="text-center leading-relaxed">
-              Powerful analysis to evaluate your resume&apos;s strengths and areas for improvement
+              Tailored suggestions to align your resume with specific job descriptions
             </p>
           </div>
 
           <div className="flex flex-col items-center p-8 rounded-2xl bg-card border border-primary shadow-sm hover:shadow-md transition-shadow">
             <div className="p-4 rounded-full bg-dark mb-6">
-              <Star className="w-8 h-8 text-primary" />
+              <ShieldCheckIcon className="text-primary"/>
             </div>
             <h3 className="text-xl font-semibold mb-3">ATS Compliant</h3>
             <p className="text-center leading-relaxed">
-              Built on compatibility with Applicant Tracking Systems (ATS)
+              Receive suggestions to maximize your resume's Applicant Tracking Systems (ATS) compatibility
             </p>
           </div>
         </div>

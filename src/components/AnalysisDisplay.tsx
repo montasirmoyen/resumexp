@@ -52,7 +52,7 @@ const SectionAnalysis: React.FC<{
         </div>
         <ul className="space-y-2">
           {section.strengths.map((strength, index) => (
-            <li key={index} className="flex items-start gap-2">
+            <li key={index} className="flex items-start">
               <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
               <span className="text-sm">{strength}</span>
             </li>
@@ -69,7 +69,7 @@ const SectionAnalysis: React.FC<{
         </div>
         <ul className="space-y-2">
           {section.improvements.map((improvement, index) => (
-            <li key={index} className="flex items-start gap-2">
+            <li key={index} className="flex items-start">
               <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
               <span className="text-sm">{improvement}</span>
             </li>
@@ -81,10 +81,10 @@ const SectionAnalysis: React.FC<{
 );
 
 export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: string }> = ({ result, resumeText }) => {
-  const getOverallScoreColor = (score: number) => {
-    if (score >= 8) return 'text-green-600';
-    if (score >= 6) return 'text-yellow-600';
-    return 'text-red-500';
+  const getMatchScoreColor = (score: number) => {
+    if (score >= 8) return 'bg-primary';
+    if (score >= 6) return 'bg-primary/50';
+    return 'bg-primary/25';
   };
 
   return (
@@ -100,15 +100,45 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
               <p>Based on comprehensive analysis</p>
             </div>
           </div>
-          <div className="text-4xl font-black">
-            {result.overallScore} / 10
-          </div>
+          <div className="flex items-center gap-2">
+              <div className="text-4xl font-black">{result.overallScore}</div>
+              <div className="text-2xl font-bold text-muted-foreground">/ 10</div>
+            </div>
         </div>
 
         {result.summary && (
           <p className="leading-relaxed">{result.summary}</p>
         )}
       </div>
+
+      {result.jobMatchScore !== undefined && result.jobMatchAnalysis && (
+        <div className="rounded-xl border p-6 border-border">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg">
+                <Target className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">Job Match Score</h3>
+                <p className="text-sm">How well your resume fits your requested job description</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="text-4xl font-black">{result.jobMatchScore}</div>
+              <div className="text-2xl font-bold text-muted-foreground">/ 10</div>
+            </div>
+          </div>
+          
+          <div className="w-full rounded-full h-3 bg-black mb-4">
+            <div
+              className={`h-2 rounded-full transition-all duration-500 ${getMatchScoreColor(result.jobMatchScore)}`}
+              style={{ width: `${result.jobMatchScore * 10}%` }}
+            />
+          </div>
+
+          <p className="leading-relaxed mt-4">{result.jobMatchAnalysis}</p>
+        </div>
+      )}
 
       <div className="rounded-xl border border-border p-6">
         <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
@@ -131,12 +161,12 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
           Detailed Analysis
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SectionAnalysis title="Content Analysis" section={result.deepAnalysis.content} />
-          <SectionAnalysis title="Structure Analysis" section={result.deepAnalysis.structure} />
-          <SectionAnalysis title="Readability Analysis" section={result.deepAnalysis.readability} />
-          <SectionAnalysis title="Professionalism Analysis" section={result.deepAnalysis.professionalism} />
-          <SectionAnalysis title="Keywords Analysis" section={result.deepAnalysis.keywords} />
-          <SectionAnalysis title="Achievements Analysis" section={result.deepAnalysis.achievements} />
+          <SectionAnalysis title="Content" section={result.deepAnalysis.content} />
+          <SectionAnalysis title="Structure" section={result.deepAnalysis.structure} />
+          <SectionAnalysis title="Readability" section={result.deepAnalysis.readability} />
+          <SectionAnalysis title="Professionalism" section={result.deepAnalysis.professionalism} />
+          <SectionAnalysis title="Keywords" section={result.deepAnalysis.keywords} />
+          <SectionAnalysis title="Achievements" section={result.deepAnalysis.achievements} />
         </div>
       </div>
 
