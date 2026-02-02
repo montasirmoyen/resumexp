@@ -162,11 +162,11 @@ export class AnalysisService {
     }
   }
 
-  static async analyzeResume(file: File): Promise<AnalysisResult> {
+  static async analyzeResume(file: File, jobDescription?: string): Promise<AnalysisResult> {
     try {
       const resumeText = await this.extractTextFromFile(file);
 
-      if (!resumeText.trim()) {
+      if (!resumeText || resumeText.length < 50) {
         throw new Error('No text could be extracted from the file');
       }
 
@@ -175,7 +175,10 @@ export class AnalysisService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ resumeText }),
+        body: JSON.stringify({ 
+          resumeText,
+          jobDescription: jobDescription && jobDescription.length > 20 ? jobDescription : undefined
+        }),
       });
 
       if (!response.ok) {
