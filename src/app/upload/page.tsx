@@ -7,7 +7,7 @@ import { AnalysisState } from '@/types/analysis';
 import { AnalysisService } from '@/services/analysis-service';
 import { useAuth } from '@/contexts/AuthContext';
 
-export default function Dashboard() {
+export default function Upload() {
     const { user, loading } = useAuth();
     const [analysisState, setAnalysisState] = useState<AnalysisState>({
         isAnalyzing: false,

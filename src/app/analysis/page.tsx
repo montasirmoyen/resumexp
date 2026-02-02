@@ -55,7 +55,7 @@ export default function AnalysisPage() {
                 <p>Here&apos;s your comprehensive resume analysis</p>
               </div>
               <button
-                onClick={() => router.push('/dashboard')}
+                onClick={() => router.push('/upload')}
                 className="px-4 py-2 rounded-lg font-semibold bg-primary text-background hover:bg-primary/25 hover:text-primary transition-colors duration-200"
               >
                 Analyze Another Resume
