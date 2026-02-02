@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AnalysisService } from '@/services/analysis-service';
 import { OpenRouter } from '@openrouter/sdk';
 
-let AI_MODEL = 'tngtech/deepseek-r1t-chimera:free';
+let AI_MODEL = 'arcee-ai/trinity-mini:free';
 const AVAILABLE_MODELS = [
   'tngtech/deepseek-r1t-chimera:free',
   'nvidia/nemotron-3-nano-30b-a3b:free',
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { resumeText } = body ?? {};
+    const { resumeText, jobDescription } = body ?? {};
 
     if (!resumeText) {
       console.error('Resume text is required');
@@ -110,6 +110,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const hasJobDescription = jobDescription && typeof jobDescription === 'string' && jobDescription.length > 20;
 
     const PREFIX_PROMPT = `
     You are an expert resume analyst.
@@ -144,6 +146,8 @@ export async function POST(request: NextRequest) {
       "recommendations": string[],
       "summary": string,
       "overallScore": number,
+      ${hasJobDescription ? '"jobMatchScore": number,' : ''}
+      ${hasJobDescription ? '"jobMatchAnalysis": string,' : ''}
       "resume": {
         "basics": {
           "name": string,
@@ -183,13 +187,21 @@ export async function POST(request: NextRequest) {
 
     Important rules:
     - Never reuse example numbers or placeholder values. All ratings and analysis must be based on the resume text.
+    - All numerical ratings must be between 0 and 10.
     - The "summary" field must directly address the user using "you" and "your".
     - The JSON must be complete and strictly follow the schema.
     - Do not add fields that are not in the schema.
     - Do not output anything before or after the JSON.
+    ${hasJobDescription ? `
+    - A job description is provided below. Compare the resume against this job description.
+    - Calculate a jobMatchScore (0-10) based on keyword overlap, skill alignment, and experience relevance.
+    - Provide jobMatchAnalysis explaining the match score and specific actions to improve fit for this role.
+    - If the job description is irrelevant or lacks information, ignore it and omit jobMatchScore and jobMatchAnalysis fields.
+    ` : ''}
 
     Now analyze the following raw resume text:
     ${resumeText}
+    ${hasJobDescription ? `\n\n--- JOB DESCRIPTION ---\n${jobDescription}\n--- END JOB DESCRIPTION ---` : ''}
     `;
 
     const openRouter = new OpenRouter({ apiKey: API_KEY });
