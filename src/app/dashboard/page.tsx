@@ -29,7 +29,7 @@ export default function Dashboard() {
         setAnalysisState(prev => ({ ...prev, error: null }));
     };
 
-    const handleAnalyze = async () => {
+    const handleAnalyze = async (jobDescription?: string) => {
         if (!selectedFile) return;
 
         const validation = AnalysisService.validateFile(selectedFile);
@@ -49,7 +49,7 @@ export default function Dashboard() {
         });
 
         try {
-            const result = await AnalysisService.analyzeResume(selectedFile);
+            const result = await AnalysisService.analyzeResume(selectedFile, jobDescription);
             try {
                 sessionStorage.setItem('lastAnalysis', JSON.stringify(result));
             } catch { }
