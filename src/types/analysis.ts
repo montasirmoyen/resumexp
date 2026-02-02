@@ -28,6 +28,8 @@ export interface AnalysisResult {
   recommendations: string[];
   summary: string;
   overallScore: number;
+  jobMatchScore?: number;
+  jobMatchAnalysis?: string;
   resume?: ResumeSchema;
 }
 
