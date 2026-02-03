@@ -4,6 +4,7 @@ import React from 'react';
 import { AnalysisResult } from '@/types/analysis';
 import { Star, TrendingUp, Target, CheckCircle, AlertCircle, Lightbulb, Monitor } from 'lucide-react';
 import { atsChecks } from '@/services/scoring';
+import { capitalize } from '@/lib/utils';
 
 interface AnalysisDisplayProps {
   result: AnalysisResult;
@@ -54,7 +55,7 @@ const SectionAnalysis: React.FC<{
           {section.strengths.map((strength, index) => (
             <li key={index} className="flex items-start">
               <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-sm">{strength}</span>
+              <span className="text-sm">{capitalize(strength)}</span>
             </li>
           ))}
         </ul>
@@ -71,7 +72,7 @@ const SectionAnalysis: React.FC<{
           {section.improvements.map((improvement, index) => (
             <li key={index} className="flex items-start">
               <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-sm">{improvement}</span>
+              <span className="text-sm">{capitalize(improvement)}</span>
             </li>
           ))}
         </ul>
@@ -101,7 +102,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
             </div>
           </div>
           <div className="flex items-center gap-2">
-              <div className="text-4xl font-black">{result.overallScore}</div>
+              <div className="text-4xl font-black">{result.ratings.overall}</div>
               <div className="text-2xl font-bold text-muted-foreground">/ 10</div>
             </div>
         </div>
@@ -179,7 +180,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
           <ul className="space-y-2">
             {atsChecks(resumeText).map((c, i) => (
               <li key={i} className="flex items-center gap-2 text-sm">
-                <span className={`w-2 h-2 rounded-full ${c.passed ? 'bg-green-600' : 'bg-caution'}`}></span>
+                <span className={`w-2 h-2 rounded-full ${c.passed ? 'bg-primary' : 'bg-caution'}`}></span>
                 <span className={c.passed ? '' : 'text-caution'}>{c.label}</span>
               </li>
             ))}
