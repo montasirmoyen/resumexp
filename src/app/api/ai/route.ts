@@ -101,8 +101,53 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { resumeText, jobDescription } = body ?? {};
+    const { resumeText, jobDescription, generateCoverLetter, analysis } = body ?? {};
 
+    // Handle cover letter generation
+    if (generateCoverLetter && analysis) {
+      try {
+        const coverLetterPrompt = `
+        You are an expert cover letter writer. Based on the resume analysis below, generate a professional and compelling cover letter.
+        The cover letter should be suitable for various job applications and should highlight the candidate's strengths.
+        
+        Resume Analysis Summary:
+        - Overall Rating: ${analysis.ratings.overall}/10
+        - Key Strengths: ${analysis.deepAnalysis.content.strengths.slice(0, 3).join(', ')}
+        - Summary: ${analysis.summary}
+        - Recommendations: ${analysis.recommendations.slice(0, 2).join('. ')}
+        
+        Generate ONLY the cover letter text. No introductions, no formatting instructions, just the cover letter itself.
+        The cover letter should be 3-4 paragraphs and professional in tone.
+        Use placeholder [Your Name], [Company Name], and [Hiring Manager Name] where appropriate.
+        `;
+
+        const openRouter = new OpenRouter({ apiKey: API_KEY });
+
+        const completion = await sendWithProviderRetry(openRouter, {
+          model: AI_MODEL,
+          messages: [
+            { role: 'system', content: 'You are a professional cover letter writer.' },
+            { role: 'user', content: coverLetterPrompt }
+          ],
+          temperature: 0.7,
+        });
+
+        const coverLetterText = extractCompletionText(completion);
+
+        return NextResponse.json({
+          success: true,
+          coverLetter: coverLetterText
+        });
+      } catch (error: any) {
+        console.error('Cover letter generation failed:', error);
+        return NextResponse.json(
+          { error: 'Failed to generate cover letter. Please try again.' },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Handle resume analysis
     if (!resumeText) {
       console.error('Resume text is required');
       return NextResponse.json(

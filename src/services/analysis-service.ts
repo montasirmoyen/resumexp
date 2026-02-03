@@ -11,6 +11,7 @@ export interface SavedAnalysis {
   originalFileName: string;
   analysis: AnalysisResult;
   storagePath?: string;
+  coverLetter?: string;
 }
 
 export class AnalysisService {
@@ -315,6 +316,49 @@ export class AnalysisService {
     } catch (error) {
       console.error('Failed to delete analysis:', error);
       throw new Error('Failed to delete analysis from database');
+    }
+  }
+
+  static async generateCoverLetter(analysis: AnalysisResult): Promise<string> {
+    try {
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          generateCoverLetter: true,
+          analysis
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || 'Failed to generate cover letter');
+      }
+
+      const data = await response.json();
+      if (!data.coverLetter) {
+        throw new Error('No cover letter in response');
+      }
+
+      return data.coverLetter;
+    } catch (error) {
+      console.error('Cover letter generation failed:', error);
+      throw error;
+    }
+  }
+
+  static async updateAnalysisCoverLetter(userId: string, analysisId: string, coverLetter: string): Promise<void> {
+    try {
+      const { updateDoc } = await import('firebase/firestore');
+      const docRef = doc(db, 'users', userId, 'analyses', analysisId);
+      await updateDoc(docRef, {
+        coverLetter
+      });
+    } catch (error) {
+      console.error('Failed to update analysis with cover letter:', error);
+      throw new Error('Failed to save cover letter');
     }
   }
 }

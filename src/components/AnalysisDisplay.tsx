@@ -8,6 +8,7 @@ import { capitalize } from '@/lib/utils';
 
 interface AnalysisDisplayProps {
   result: AnalysisResult;
+  resumeText?: string;
 }
 
 const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
@@ -203,6 +204,18 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
                 <p className="leading-relaxed">{recommendation}</p>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {result.coverLetter && (
+        <div className="rounded-xl border border-border p-6">
+          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <Lightbulb className="w-6 h-6 text-primary" />
+            Generated Cover Letter
+          </h3>
+          <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
+            {result.coverLetter}
           </div>
         </div>
       )}

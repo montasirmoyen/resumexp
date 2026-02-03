@@ -30,6 +30,7 @@ export interface AnalysisResult {
   jobMatchScore?: number;
   jobMatchAnalysis?: string;
   resume?: ResumeSchema;
+  coverLetter?: string;
 }
 
 export interface ApiResponse {
