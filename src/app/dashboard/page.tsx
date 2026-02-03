@@ -18,11 +18,8 @@ export default function Upload() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const router = useRouter();
 
-    useEffect(() => {
-        if (!loading && !user) {
-            router.push('/auth');
-        }
-    }, [user, loading, router]);
+    // Allow guests to access dashboard, but track if they're authenticated
+    const isGuest = !loading && !user;
 
     const handleFileSelect = (file: File | null) => {
         setSelectedFile(file);
@@ -50,17 +47,25 @@ export default function Upload() {
 
         try {
             const result = await AnalysisService.analyzeResume(selectedFile, jobDescription);
-            
-            // Save to Firebase
+
+            // Save to Firebase only for authenticated users
             if (user) {
                 await AnalysisService.saveAnalysis(user.uid, result, selectedFile.name);
             }
 
             // Store in sessionStorage for the analysis page
-            sessionStorage.setItem('currentAnalysis', JSON.stringify({
+            const analysisData: any = {
                 analysis: result,
                 originalFileName: selectedFile.name
-            }));
+            };
+
+            // Only include auth info if user is authenticated
+            if (user) {
+                analysisData.id = selectedFile.name; // Will be replaced by actual ID if saving to Firebase
+                analysisData.userId = user.uid;
+            }
+
+            sessionStorage.setItem('currentAnalysis', JSON.stringify(analysisData));
 
             setAnalysisState({
                 isAnalyzing: false,
@@ -89,10 +94,6 @@ export default function Upload() {
         );
     }
 
-    if (!user) {
-        return null;
-    }
-
     return (
         <div className="min-h-screen">
             <section className="mt-24">
@@ -102,8 +103,14 @@ export default function Upload() {
                     onAnalyze={handleAnalyze}
                     isAnalyzing={analysisState.isAnalyzing}
                     error={analysisState.error}
+                    isGuest={isGuest}
                 />
             </section>
+            {/* Only show past analyses for authenticated users */}
+            {!isGuest && (
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                </section>
+            )}
         </div>
     )
 }

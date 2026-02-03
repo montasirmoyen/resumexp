@@ -20,6 +20,7 @@ export default function AnalysisPage() {
   const [userId, setUserId] = useState<string>('');
   const [generatingCoverLetter, setGeneratingCoverLetter] = useState(false);
   const [coverLetterError, setCoverLetterError] = useState<string | null>(null);
+  const [isGuest, setIsGuest] = useState(false);
 
   useEffect(() => {
     try {
@@ -30,6 +31,8 @@ export default function AnalysisPage() {
         setFileName(data.originalFileName || '');
         setAnalysisId(data.id || '');
         setUserId(data.userId || '');
+        // Detect if user is guest (no userId)
+        setIsGuest(!data.userId);
         // Load coverLetter if it exists in SavedAnalysis
         if (data.coverLetter) {
           setResult(prev => prev ? { ...prev, coverLetter: data.coverLetter } : null);
@@ -48,8 +51,18 @@ export default function AnalysisPage() {
   }, [jd, role, resumeText]);
 
   const handleGenerateCoverLetter = async () => {
-    if (!result || !userId || !analysisId) {
-      setCoverLetterError('Missing required information');
+    if (!result) {
+      setCoverLetterError('Missing analysis data');
+      return;
+    }
+
+    // Guests cannot save cover letters
+    if (isGuest) {
+      setCoverLetterError('Sign in to save your cover letter');
+      return;
+    }
+
+    if (!userId || !analysisId) {
       return;
     }
 
@@ -97,8 +110,9 @@ export default function AnalysisPage() {
               <div>
                 <h2 className="text-3xl font-bold mb-2">Resume Analysis</h2>
                 <p>Here&apos;s your comprehensive resume analysis</p>
+                {isGuest && <p className="text-sm text-muted-foreground mt-2">Guest analysis - not saved</p>}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap justify-end">
                 {!result.coverLetter && (
                   <button
                     onClick={handleGenerateCoverLetter}
@@ -112,8 +126,16 @@ export default function AnalysisPage() {
                   onClick={() => router.push('/dashboard')}
                   className="px-4 py-2 rounded-lg font-semibold bg-primary text-background hover:bg-primary/25 hover:text-primary transition-colors duration-200"
                 >
-                  Analyze Another Resume
+                  Go to Dashboard
                 </button>
+                {isGuest && (
+                  <a
+                    href="/auth"
+                    className="px-4 py-2 rounded-lg font-semibold bg-dark text-foreground hover:bg-foreground hover:text-dark transition-colors duration-200"
+                  >
+                    Sign In to Save
+                  </a>
+                )}
               </div>
             </div>
 

@@ -10,6 +10,7 @@ interface FileUploadProps {
   onAnalyze: (jobDescription?: string) => void;
   isAnalyzing: boolean;
   error: string | null;
+  isGuest?: boolean;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
@@ -17,7 +18,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   onFileSelect,
   onAnalyze,
   isAnalyzing,
-  error
+  error,
+  isGuest = false
 }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [currentMessage, setCurrentMessage] = useState('Extracting your resume…');
@@ -228,9 +230,19 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           </div>
         )}
       </section>
-      {(!isAnalyzing && !selectedFile) && (
+      {(!isAnalyzing && !selectedFile && !isGuest) && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <PastAnalysesList />
+        </section>
+      )}
+      {(!isAnalyzing && !selectedFile && isGuest) && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+          <div className="text-center py-12 rounded-lg">
+            <p className="text-muted-foreground mb-4">Sign in to save and access your past analyses</p>
+            <a href="/auth" className="px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium inline-block">
+              Sign In
+            </a>
+          </div>
         </section>
       )}
     </div>
