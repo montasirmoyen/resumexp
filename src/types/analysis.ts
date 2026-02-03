@@ -27,7 +27,6 @@ export interface AnalysisResult {
   deepAnalysis: DeepAnalysis;
   recommendations: string[];
   summary: string;
-  overallScore: number;
   jobMatchScore?: number;
   jobMatchAnalysis?: string;
   resume?: ResumeSchema;
