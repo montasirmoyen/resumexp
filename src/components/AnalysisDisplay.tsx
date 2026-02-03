@@ -91,7 +91,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
 
   return (
     <div className="space-y-8">
-      <div className={`rounded-xl border p-6 border-border`}>
+      <div className="rounded-xl border p-6 border-border bg-background/50">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg">
@@ -114,7 +114,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
       </div>
 
       {result.jobMatchScore !== undefined && result.jobMatchAnalysis && (
-        <div className="rounded-xl border p-6 border-border">
+        <div className="rounded-xl border p-6 border-border bg-background/50">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg">
@@ -142,7 +142,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
         </div>
       )}
 
-      <div className="rounded-xl border border-border p-6">
+      <div className="rounded-xl border border-border p-6 bg-background/50">
         <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
           <Star className="w-6 h-6 text-primary" />
           Detailed Ratings
@@ -157,7 +157,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
         </div>
       </div>
 
-      <div className="rounded-xl border border-border space-y-6 p-6">
+      <div className="rounded-xl border border-border space-y-6 p-6 bg-background/50">
         <h3 className="text-xl font-bold flex items-center gap-2">
           <Target className="w-6 h-6 text-primary" />
           Detailed Analysis
@@ -172,7 +172,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
         </div>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 lg:grid-cols-1 gap-6">
+      <div className="mt-10 grid grid-cols-1 lg:grid-cols-1 gap-6 bg-background/50">
         <div className={`rounded-xl border p-6 ${atsChecks(resumeText).every(c => c.passed) ? 'border-primary' : 'border-caution'}`}>
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
             <Monitor className={`w-6 h-6 ${atsChecks(resumeText).every(c => c.passed) ? 'text-primary' : 'text-caution'}`} />
@@ -190,7 +190,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
       </div>
 
       {result.recommendations.length > 0 && (
-        <div className="rounded-xl border border-primary p-6">
+        <div className="rounded-xl border border-primary p-6 bg-background/50">
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
             <Lightbulb className="w-6 h-6 text-primary" />
             Key Recommendations
@@ -209,7 +209,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
       )}
 
       {result.coverLetter && (
-        <div className="rounded-xl border border-border p-6">
+        <div className="rounded-xl border border-border p-6 bg-background/50">
           <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
             <Lightbulb className="w-6 h-6 text-primary" />
             Generated Cover Letter

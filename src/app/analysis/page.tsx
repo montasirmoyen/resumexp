@@ -57,9 +57,9 @@ export default function AnalysisPage() {
       setGeneratingCoverLetter(true);
       setCoverLetterError(null);
       const coverLetter = await AnalysisService.generateCoverLetter(result);
-      
+
       setResult(prev => prev ? { ...prev, coverLetter } : null);
-      
+
       // Update sessionStorage to persist cover letter
       const stored = sessionStorage.getItem('currentAnalysis');
       if (stored) {
@@ -67,7 +67,7 @@ export default function AnalysisPage() {
         data.coverLetter = coverLetter;
         sessionStorage.setItem('currentAnalysis', JSON.stringify(data));
       }
-      
+
       await AnalysisService.updateAnalysisCoverLetter(userId, analysisId, coverLetter);
     } catch (error) {
       console.error('Failed to generate cover letter:', error);
@@ -99,13 +99,15 @@ export default function AnalysisPage() {
                 <p>Here&apos;s your comprehensive resume analysis</p>
               </div>
               <div className="flex gap-2">
-                <button
-                  onClick={handleGenerateCoverLetter}
-                  disabled={generatingCoverLetter || !result}
-                  className="px-4 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {generatingCoverLetter ? 'Generating...' : 'Generate Cover Letter'}
-                </button>
+                {!result.coverLetter && (
+                  <button
+                    onClick={handleGenerateCoverLetter}
+                    disabled={generatingCoverLetter || !result}
+                    className="px-4 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {generatingCoverLetter ? 'Generating...' : 'Generate Cover Letter'}
+                  </button>
+                )}
                 <button
                   onClick={() => router.push('/dashboard')}
                   className="px-4 py-2 rounded-lg font-semibold bg-primary text-background hover:bg-primary/25 hover:text-primary transition-colors duration-200"
@@ -122,22 +124,6 @@ export default function AnalysisPage() {
             )}
 
             <AnalysisDisplay result={result} resumeText={resumeText} />
-
-            {result?.coverLetter && (
-              <div className="mt-10 rounded-xl border border-border p-6 bg-card">
-                <h3 className="text-2xl font-bold mb-4">Generated Cover Letter</h3>
-                <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
-                  {result.coverLetter}
-                </div>
-              </div>
-            )}
-
-            {/*{result?.resume && (
-              <div className="mt-10">
-                <h3 className="text-2xl font-bold mb-4">Rebuilt Resume Preview</h3>
-                <ResumePreview resume={result.resume} />
-              </div>
-            )}*/}
           </div>
         )}
       </section>
