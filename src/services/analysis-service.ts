@@ -1,6 +1,8 @@
 import { AnalysisResult, ApiResponse, ResumeSchema } from '@/types/analysis';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, query, orderBy, getDocs, doc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { db, storage } from '@/lib/firebase';
+import { collection, addDoc, query, orderBy, getDocs, doc, getDoc, deleteDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { FirebaseError } from 'firebase/app';
+import { deleteObject, ref } from 'firebase/storage';
 
 export interface SavedAnalysis {
   id: string;
@@ -8,6 +10,7 @@ export interface SavedAnalysis {
   createdAt: Timestamp;
   originalFileName: string;
   analysis: AnalysisResult;
+  storagePath?: string;
 }
 
 export class AnalysisService {
@@ -289,6 +292,29 @@ export class AnalysisService {
     } catch (error) {
       console.error('Failed to fetch analysis:', error);
       throw new Error('Failed to fetch analysis from database');
+    }
+  }
+
+  static async deleteAnalysis(userId: string, analysisId: string, storagePath?: string): Promise<void> {
+    try {
+      if (storagePath) {
+        await deleteObject(ref(storage, storagePath));
+      }
+    } catch (error) {
+      if (error instanceof FirebaseError && error.code === 'storage/object-not-found') {
+        console.warn('Resume not found in storage, continuing delete.');
+      } else {
+        console.warn('Failed to delete resume from storage:', error);
+        throw new Error('Failed to delete resume from storage');
+      }
+    }
+
+    try {
+      const docRef = doc(db, 'users', userId, 'analyses', analysisId);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error('Failed to delete analysis:', error);
+      throw new Error('Failed to delete analysis from database');
     }
   }
 }

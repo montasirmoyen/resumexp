@@ -15,6 +15,8 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
   const [analyses, setAnalyses] = useState<SavedAnalysis[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -46,6 +48,24 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
       // Store in sessionStorage for the analysis page to pick up
       sessionStorage.setItem('currentAnalysis', JSON.stringify(analysis));
       router.push('/analysis');
+    }
+  };
+
+  const handleDelete = async (analysis: SavedAnalysis) => {
+    if (!user) return;
+    const confirmed = window.confirm(`Delete analysis for "${analysis.originalFileName}"?`);
+    if (!confirmed) return;
+
+    try {
+      setDeletingId(analysis.id);
+      setActionError(null);
+      await AnalysisService.deleteAnalysis(user.uid, analysis.id, analysis.storagePath);
+      setAnalyses(prev => prev.filter(item => item.id !== analysis.id));
+    } catch (err) {
+      console.error('Failed to delete analysis:', err);
+      setActionError('Failed to delete analysis');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -105,6 +125,11 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
   return (
     <div className="mt-12">
       <h2 className="text-2xl font-bold mb-6">Past Analyses</h2>
+      {actionError && (
+        <div className="text-destructive px-4 py-3 rounded-lg mb-4">
+          {actionError}
+        </div>
+      )}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {analyses.map((analysis) => (
           <div
@@ -126,12 +151,21 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={() => handleView(analysis)}
-                className="w-full px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium"
-              >
-                View Analysis
-              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => handleView(analysis)}
+                  className="w-full px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium"
+                >
+                  View Analysis
+                </button>
+                <button
+                  onClick={() => handleDelete(analysis)}
+                  disabled={deletingId === analysis.id}
+                  className="w-full px-4 py-2 bg-destructive text-foreground hover:bg-destructive/25 hover:text-destructive rounded-lg transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {deletingId === analysis.id ? 'Deleting…' : 'Delete'}
+                </button>
+              </div>
             </div>
           </div>
         ))}
