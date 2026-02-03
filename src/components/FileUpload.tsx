@@ -3,6 +3,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, File, X, AlertCircle, LockIcon } from 'lucide-react';
 import { PastAnalysesList } from './PastAnalysesList';
+import Link from 'next/link';
 
 interface FileUploadProps {
   selectedFile: File | null;
@@ -239,9 +240,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
           <div className="text-center py-12 rounded-lg">
             <p className="text-muted-foreground mb-4">Sign in to save and access your past analyses</p>
-            <a href="/auth" className="px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium inline-block">
+            <Link href="/auth" className="px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium inline-block">
               Sign In
-            </a>
+            </Link>
           </div>
         </section>
       )}

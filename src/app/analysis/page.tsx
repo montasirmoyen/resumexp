@@ -6,6 +6,7 @@ import { AnalysisResult } from '@/types/analysis';
 import { AnalysisDisplay } from '@/components/AnalysisDisplay';
 import { computeJdMatch } from '@/services/scoring';
 import { SavedAnalysis, AnalysisService } from '@/services/analysis-service';
+import Link from 'next/link';
 
 export default function AnalysisPage() {
   const router = useRouter();
@@ -129,12 +130,12 @@ export default function AnalysisPage() {
                   Go to Dashboard
                 </button>
                 {isGuest && (
-                  <a
+                  <Link
                     href="/auth"
                     className="px-4 py-2 rounded-lg font-semibold bg-dark text-foreground hover:bg-foreground hover:text-dark transition-colors duration-200"
                   >
                     Sign In to Save
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>

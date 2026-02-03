@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Navbar() {
     const { user } = useAuth();
@@ -23,12 +24,12 @@ export default function Navbar() {
         <nav className="sticky top-0 z-50 backdrop-blur-sm bg-navbar/85 shadow-xl shadow-navbar/75">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
-                    <a href="/">
+                    <Link href="/">
                         <div className="flex items-center">
                             <Star className="p-2 text-primary" width={40} height={40} fill="currentColor" />
                             <h1 className="text-2xl font-bold">ResumeXP</h1>
                         </div>
-                    </a>
+                    </Link>
                     
                     {user && (
                         <div className="flex items-center gap-4">
