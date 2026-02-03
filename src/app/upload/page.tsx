@@ -1,6 +1,7 @@
 "use client";
 
 import { FileUpload } from "@/components/FileUpload"
+import { PastAnalysesList } from "@/components/PastAnalysesList"
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnalysisState } from '@/types/analysis';
@@ -15,7 +16,6 @@ export default function Upload() {
         error: null
     });
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [hasPreviousAnalysis, setHasPreviousAnalysis] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -50,9 +50,18 @@ export default function Upload() {
 
         try {
             const result = await AnalysisService.analyzeResume(selectedFile, jobDescription);
-            try {
-                sessionStorage.setItem('lastAnalysis', JSON.stringify(result));
-            } catch { }
+            
+            // Save to Firebase
+            if (user) {
+                await AnalysisService.saveAnalysis(user.uid, result, selectedFile.name);
+            }
+
+            // Store in sessionStorage for the analysis page
+            sessionStorage.setItem('currentAnalysis', JSON.stringify({
+                analysis: result,
+                originalFileName: selectedFile.name
+            }));
+
             setAnalysisState({
                 isAnalyzing: false,
                 result: null,
@@ -68,15 +77,6 @@ export default function Upload() {
             });
         }
     };
-
-    useEffect(() => {
-        try {
-            const stored = sessionStorage.getItem('lastAnalysis');
-            setHasPreviousAnalysis(!!stored);
-        } catch {
-            setHasPreviousAnalysis(false);
-        }
-    }, []);
 
     if (loading) {
         return (
@@ -103,6 +103,9 @@ export default function Upload() {
                     isAnalyzing={analysisState.isAnalyzing}
                     error={analysisState.error}
                 />
+            </section>
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <PastAnalysesList />
             </section>
         </div>
     )

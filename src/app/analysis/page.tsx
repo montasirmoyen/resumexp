@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import { AnalysisResult } from '@/types/analysis';
 import { AnalysisDisplay } from '@/components/AnalysisDisplay';
 import { computeJdMatch } from '@/services/scoring';
+import { SavedAnalysis } from '@/services/analysis-service';
 
 export default function AnalysisPage() {
   const router = useRouter();
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [fileName, setFileName] = useState<string>('');
   const [role, setRole] = useState('');
   const [jd, setJd] = useState('');
   const [jdMatch, setJdMatch] = useState<number>(0);
@@ -17,9 +19,11 @@ export default function AnalysisPage() {
 
   useEffect(() => {
     try {
-      const stored = sessionStorage.getItem('lastAnalysis');
+      const stored = sessionStorage.getItem('currentAnalysis');
       if (stored) {
-        setResult(JSON.parse(stored));
+        const data: SavedAnalysis = JSON.parse(stored);
+        setResult(data.analysis);
+        setFileName(data.originalFileName || '');
       }
       const txt = sessionStorage.getItem('lastResumeText');
       if (txt) setResumeText(txt);

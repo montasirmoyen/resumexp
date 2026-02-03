@@ -1,4 +1,14 @@
 import { AnalysisResult, ApiResponse, ResumeSchema } from '@/types/analysis';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, query, orderBy, getDocs, doc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+
+export interface SavedAnalysis {
+  id: string;
+  userId: string;
+  createdAt: Timestamp;
+  originalFileName: string;
+  analysis: AnalysisResult;
+}
 
 export class AnalysisService {
   static createMockAnalysis(): AnalysisResult {
@@ -90,7 +100,6 @@ export class AnalysisService {
       ],
       summary:
         "[MOCK-DATA] Your resume shows strong technical experience and a solid foundation. Improving clarity, adding more measurable achievements and refining your summary will make your resume more competitive.",
-      overallScore: 7.2,
       resume: {
         basics: {
           name: "Alex Candidate",
@@ -226,5 +235,60 @@ export class AnalysisService {
     }
 
     return { isValid: true };
+  }
+
+  static async saveAnalysis(userId: string, analysis: AnalysisResult, fileName: string): Promise<string> {
+    try {
+      // Use subcollection: users/{userId}/analyses/{analysisId}
+      const userAnalysesRef = collection(db, 'users', userId, 'analyses');
+      const docRef = await addDoc(userAnalysesRef, {
+        createdAt: serverTimestamp(),
+        originalFileName: fileName,
+        analysis
+      });
+      return docRef.id;
+    } catch (error) {
+      console.error('Failed to save analysis:', error);
+      throw new Error('Failed to save analysis to database');
+    }
+  }
+
+  static async getAnalyses(userId: string): Promise<SavedAnalysis[]> {
+    try {
+      // Query subcollection - no composite index needed!
+      const userAnalysesRef = collection(db, 'users', userId, 'analyses');
+      const q = query(userAnalysesRef, orderBy('createdAt', 'desc'));
+      
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        userId,
+        ...doc.data()
+      } as SavedAnalysis));
+    } catch (error) {
+      console.error('Failed to fetch analyses:', error);
+      throw new Error('Failed to fetch analyses from database');
+    }
+  }
+
+  static async getAnalysisById(userId: string, id: string): Promise<SavedAnalysis | null> {
+    try {
+      // Access from user's subcollection
+      const docRef = doc(db, 'users', userId, 'analyses', id);
+      const docSnap = await getDoc(docRef);
+      
+      if (!docSnap.exists()) {
+        return null;
+      }
+
+      return {
+        id: docSnap.id,
+        userId,
+        ...docSnap.data()
+      } as SavedAnalysis;
+    } catch (error) {
+      console.error('Failed to fetch analysis:', error);
+      throw new Error('Failed to fetch analysis from database');
+    }
   }
 }
