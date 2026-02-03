@@ -266,7 +266,10 @@ export async function POST(request: NextRequest) {
 
     if (!jsonText) {
       console.error('Planner returned no JSON:', text);
-      return { error: 'Failed to parse AI response. Please try again.', status: 500 };
+      return NextResponse.json(
+        { error: 'Failed to parse AI response. Please try again.' },
+        { status: 500 }
+      );
     }
 
     try {
