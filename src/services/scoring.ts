@@ -26,7 +26,7 @@ export function computeJdMatch(resumeText: string, jdText: string): { match: num
 
 export function scoreInterviewLikelihood(result: AnalysisResult, jdMatch: number): number {
   const clamp10 = (n: number) => Math.max(0, Math.min(10, n));
-  const overall = clamp10(result.overallScore);
+  const overall = clamp10(result.ratings.overall);
   const k = clamp10(result.ratings.keywords);
   const a = clamp10(result.ratings.achievements);
   const m = Math.max(0, Math.min(10, Math.round(jdMatch * 10)));
