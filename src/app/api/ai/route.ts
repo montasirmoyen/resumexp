@@ -145,7 +145,6 @@ export async function POST(request: NextRequest) {
       },
       "recommendations": string[],
       "summary": string,
-      "overallScore": number,
       ${hasJobDescription ? '"jobMatchScore": number,' : ''}
       ${hasJobDescription ? '"jobMatchAnalysis": string,' : ''}
       "resume": {
