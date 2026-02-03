@@ -30,7 +30,7 @@ export default function AuthPage() {
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
       }
-      router.push('/upload');
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Authentication failed');
     } finally {
@@ -44,7 +44,7 @@ export default function AuthPage() {
 
     try {
       await signInWithPopup(auth, googleProvider);
-      router.push('/upload');
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Google sign-in failed');
     } finally {
