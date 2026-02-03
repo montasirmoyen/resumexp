@@ -102,9 +102,9 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
             </div>
           </div>
           <div className="flex items-center gap-2">
-              <div className="text-4xl font-black">{result.ratings.overall}</div>
-              <div className="text-2xl font-bold text-muted-foreground">/ 10</div>
-            </div>
+            <div className="text-4xl font-black">{result.ratings.overall}</div>
+            <div className="text-2xl font-bold text-muted-foreground">/ 10</div>
+          </div>
         </div>
 
         {result.summary && (
@@ -129,7 +129,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
               <div className="text-2xl font-bold text-muted-foreground">/ 10</div>
             </div>
           </div>
-          
+
           <div className="w-full rounded-full h-3 bg-black mb-4">
             <div
               className={`h-2 rounded-full transition-all duration-500 ${getMatchScoreColor(result.jobMatchScore)}`}

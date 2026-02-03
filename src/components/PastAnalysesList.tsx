@@ -84,7 +84,7 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
     return (
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-6">Past Analyses</h2>
-        <div className="bg-destructive/10 text-destructive px-4 py-3 rounded-lg">
+        <div className="text-destructive px-4 py-3 rounded-lg">
           {error}
         </div>
       </div>
@@ -95,8 +95,8 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
     return (
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-6">Past Analyses</h2>
-        <div className="text-center py-12 bg-muted/30 rounded-lg">
-          <p className="text-muted-foreground">No past analyses yet. Upload a resume to get started!</p>
+        <div className="text-center py-12 rounded-lg">
+          <p className="text-muted-foreground">No past analyses yet.</p>
         </div>
       </div>
     );
@@ -109,7 +109,7 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
         {analyses.map((analysis) => (
           <div
             key={analysis.id}
-            className="border rounded-lg p-4 hover:border-primary transition-colors bg-card"
+            className="border rounded-lg p-4 transition-colors bg-card"
           >
             <div className="flex flex-col h-full">
               <div className="flex-1">
@@ -117,11 +117,9 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
                   {analysis.originalFileName}
                 </h3>
                 <div className="space-y-1 mb-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Overall Score</span>
-                    <span className="text-lg font-bold text-primary">
-                      {analysis.analysis.ratings.overall.toFixed(1)}/10
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <div className="text-4xl font-black">{analysis.analysis.ratings.overall}</div>
+                    <div className="text-2xl font-bold text-muted-foreground">/ 10</div>
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {formatDate(analysis.createdAt)}
@@ -130,7 +128,7 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
               </div>
               <button
                 onClick={() => handleView(analysis)}
-                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+                className="w-full px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium"
               >
                 View Analysis
               </button>
