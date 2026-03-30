@@ -2,12 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AnalysisService } from '@/services/analysis-service';
 import { OpenRouter } from '@openrouter/sdk';
 
-let AI_MODEL = 'arcee-ai/trinity-mini:free';
+let AI_MODEL = 'nvidia/nemotron-3-nano-30b-a3b:free';
 const AVAILABLE_MODELS = [
-  'tngtech/deepseek-r1t-chimera:free',
-  'nvidia/nemotron-3-nano-30b-a3b:free',
   'arcee-ai/trinity-mini:free',
-  'tngtech/deepseek-r1t2-chimera:free',
+  'nvidia/nemotron-3-nano-30b-a3b:free',
 ];
 function changeModel() {
   const otherModels = AVAILABLE_MODELS.filter((m) => m !== AI_MODEL);
