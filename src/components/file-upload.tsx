@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, File, X, AlertCircle, LockIcon } from 'lucide-react';
-import { PastAnalysesList } from './PastAnalysesList';
+import { PastAnalysesList } from './past-analyses-list';
 import Link from 'next/link';
 
 interface FileUploadProps {
