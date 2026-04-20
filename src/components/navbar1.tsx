@@ -63,9 +63,9 @@ interface NavbarProps {
 const Navbar = ({
   logo = {
     url: "/",
-    imageUrl: "/ramai-logo.png",
-    alt: "RamAI Logo",
-    title: "RamAI",
+    imageUrl: "/rxp-logo.png",
+    alt: "ResumeXP Logo",
+    title: "ResumeXP",
   },
   menu = [
     { title: "Home", url: "/" },
