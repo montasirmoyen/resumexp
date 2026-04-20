@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail, Lock } from 'lucide-react';
 import { FaChrome } from 'react-icons/fa'
 import { useAuth } from '@/contexts/auth-context';
 import { Button } from '@/components/ui/button';
 
-export default function AuthPage() {
+function AuthPageContent() {
   const { user, loading: authLoading, login, register, loginWithGoogle } = useAuth();
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
@@ -195,5 +195,19 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center px-4">
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      }
+    >
+      <AuthPageContent />
+    </Suspense>
   );
 }
