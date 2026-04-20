@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Zap, LogOut, User } from "lucide-react";
+import { Menu, LogOut, User } from "lucide-react";
 import Image from "next/image";
 
 import {
@@ -28,6 +28,7 @@ import {
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MenuItem {
   title: string;
@@ -63,7 +64,7 @@ interface NavbarProps {
 const Navbar = ({
   logo = {
     url: "/",
-    imageUrl: "/rxp-logo.png",
+    imageUrl: "/rxp-logo-3.png",
     alt: "ResumeXP Logo",
     title: "ResumeXP",
   },
@@ -81,17 +82,16 @@ const Navbar = ({
   },
   className,
 }: NavbarProps) => {
-  const user = null; // Replace with actual user state from auth context
-  const loading = false; // Replace with actual loading state from auth context
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
 
   const filteredMenu = menu.filter(
     (item) => !item.authRequired || user
   );
 
-  const handleSignOut = () => {
-    // Implement sign out logic here (e.g., call auth context method)
-    // After signing out, redirect to home page
+  const handleSignOut = async () => {
+    await logout();
+    router.push("/");
   }
 
   return (
@@ -116,14 +116,12 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2 pl-6">
-            {/* 
-            
             {loading ? null : user ? (
               <>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <User className="size-4" />
-                 <span className="max-w-32 truncate font-medium text-foreground">
-                    {user.displayName || user.email}
+                  <span className="max-w-32 truncate font-medium text-foreground">
+                    {user.displayName || user.email || "User"}
                   </span>
                 </div>
                 <Button variant="outline" size="sm" onClick={handleSignOut}>
@@ -141,8 +139,6 @@ const Navbar = ({
                 </Button>
               </>
             )}
-            
-            */}
             <ThemeToggle />
           </div>
         </nav>
@@ -184,9 +180,9 @@ const Navbar = ({
                       <>
                         <div className="flex items-center gap-2 text-sm">
                           <User className="size-4" />
-                          {/*<span className="font-medium">
-                            {user.displayName || user.email}
-                          </span>*/}
+                          <span className="font-medium">
+                            {user.displayName || user.email || "User"}
+                          </span>
                         </div>
                         <Button variant="outline" onClick={handleSignOut}>
                           <LogOut className="size-4" />
