@@ -28,7 +28,7 @@ import {
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth-context";
 
 interface MenuItem {
   title: string;
@@ -95,7 +95,7 @@ const Navbar = ({
   }
 
   return (
-    <section className={cn("py-4", className)}>
+    <section className={cn("py-4 border-b", className)}>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Desktop Menu */}
         <nav className="hidden w-full items-center justify-between gap-8 lg:flex">
