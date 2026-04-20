@@ -1,34 +1,45 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Navbar from '@/components/Navbar';
-import Footer from "@/components/Footer";
-import { AuthProvider } from '@/contexts/AuthContext';
+import { Geist_Mono, Figtree } from "next/font/google"
 
-const inter = Inter({
-  variable: "--font-inter",
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { cn } from "@/lib/utils";
+import { Navbar } from '@/components/navbar1';
+import { Footer } from "@/components/footer1";
+import { AuthProvider } from '@/contexts/auth-context';
+
+const figtree = Figtree({subsets:['latin'],variable:'--font-sans'})
+
+const fontMono = Geist_Mono({
   subsets: ["latin"],
-});
+  variable: "--font-mono",
+})
 
-export const metadata: Metadata = {
-  title: "ResumeXP - AI Resume Enhancer",
-  description: "Enhance your resume with AI-powered analysis and optimization.",
-};
+export const metadata = {
+  title: "ResumeXP",
+  description:
+    "ResumeXP is an AI-powered resume analysis and optimization tool that helps job seekers improve their resumes and increase their chances of landing their dream jobs. With advanced natural language processing and machine learning algorithms, ResumeXP provides personalized feedback and actionable insights to enhance your resume's effectiveness.",
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("antialiased", fontMono.variable, "font-sans", figtree.variable)}
+    >
+      <body>
         <AuthProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <ThemeProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>
-  );
+  )
 }

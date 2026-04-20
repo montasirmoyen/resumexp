@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnalysisService, SavedAnalysis } from '@/services/analysis-service';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth-context';
 import { useRouter } from 'next/navigation';
+import { Button } from './ui/button';
 
 interface PastAnalysesListProps {
   onAnalysisSelect?: (analysis: SavedAnalysis) => void;
@@ -152,19 +153,20 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <button
+                <Button
                   onClick={() => handleView(analysis)}
-                  className="w-full px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium"
+                  className="w-full px-4 py-2"
                 >
                   View Analysis
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => handleDelete(analysis)}
                   disabled={deletingId === analysis.id}
-                  className="w-full px-4 py-2 bg-destructive text-foreground hover:bg-destructive/25 hover:text-destructive rounded-lg transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                  variant={"destructive"}
+                  className="w-full px-4 py-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {deletingId === analysis.id ? 'Deleting…' : 'Delete'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

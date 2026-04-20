@@ -1,56 +1,78 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithPopup
-} from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase';
-import { Mail, Lock, Chrome } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Mail, Lock } from 'lucide-react';
+import { FaChrome } from 'react-icons/fa'
+import { useAuth } from '@/contexts/auth-context';
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
+  const { user, loading: authLoading, login, register, loginWithGoogle } = useAuth();
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
+  const isLoginMode = mode !== 'register';
+  const [isLogin, setIsLogin] = useState(isLoginMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace('/dashboard');
+    }
+  }, [authLoading, user, router]);
+
+  useEffect(() => {
+    setIsLogin(isLoginMode);
+  }, [isLoginMode]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    setIsSubmitting(true);
 
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        await login(email, password);
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        if (password !== confirmPassword) {
+          setError('Passwords do not match');
+          return;
+        }
+        await register(email, password);
       }
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Authentication failed');
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
     setError('');
-    setLoading(true);
+    setIsSubmitting(true);
 
     try {
-      await signInWithPopup(auth, googleProvider);
+      await loginWithGoogle();
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Google sign-in failed');
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -67,10 +89,10 @@ export default function AuthPage() {
         <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
           <button
             onClick={handleGoogleSignIn}
-            disabled={loading}
+            disabled={isSubmitting}
             className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-border rounded-lg hover:bg-primary/10 transition-colors font-medium mb-6 disabled:opacity-50"
           >
-            <Chrome className="w-5 h-5" />
+            <FaChrome className="w-5 h-5" />
             Continue with Google
           </button>
 
@@ -143,17 +165,17 @@ export default function AuthPage() {
             )}
 
             {error && (
-              <div className="text-sm text-red-500 bg-red-50 dark:bg-red-950/30 p-3 rounded-lg">
+              <div className="text-sm text-red-500 bg-red-500 p-3 rounded-lg">
                 {error}
               </div>
             )}
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="w-full px-4 py-3 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-colors font-medium disabled:opacity-50"
             >
-              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Sign Up')}
+              {isSubmitting ? 'Please wait...' : (isLogin ? 'Sign In' : 'Sign Up')}
             </button>
           </form>
 

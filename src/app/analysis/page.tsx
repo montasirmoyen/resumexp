@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnalysisResult } from '@/types/analysis';
-import { AnalysisDisplay } from '@/components/AnalysisDisplay';
+import { AnalysisDisplay } from '@/components/analysis-display';
 import { computeJdMatch } from '@/services/scoring';
 import { SavedAnalysis, AnalysisService } from '@/services/analysis-service';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function AnalysisPage() {
   const router = useRouter();
@@ -115,20 +116,21 @@ export default function AnalysisPage() {
               </div>
               <div className="flex gap-2 flex-wrap justify-end">
                 {!result.coverLetter && (
-                  <button
+                  <Button
                     onClick={handleGenerateCoverLetter}
                     disabled={generatingCoverLetter || !result}
-                    className="px-4 py-2 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    variant={"secondary"}
+                    className="px-4 py-2 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {generatingCoverLetter ? 'Generating...' : 'Generate Cover Letter'}
-                  </button>
+                  </Button>
                 )}
-                <button
+                <Button
                   onClick={() => router.push('/dashboard')}
-                  className="px-4 py-2 rounded-lg font-semibold bg-primary text-background hover:bg-primary/25 hover:text-primary transition-colors duration-200"
+                  className="px-4 py-2 rounded-lg font-semibold"
                 >
                   Go to Dashboard
-                </button>
+                </Button>
                 {isGuest && (
                   <Link
                     href="/auth"

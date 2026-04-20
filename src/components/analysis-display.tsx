@@ -18,9 +18,9 @@ const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
 }) => {
   const percentage = (value / max) * 100;
   const getColor = (val: number) => {
-    if (val >= 8) return 'bg-positive';
-    if (val >= 6) return 'bg-positive/50';
-    return 'bg-positive/25';
+    if (val >= 8) return 'bg-primary';
+    if (val >= 6) return 'bg-primary/50';
+    return 'bg-primary/25';
   };
 
   return (
@@ -29,7 +29,7 @@ const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
         <span className="text-sm font-medium">{label}</span>
         <span className="text-sm font-bold">{value}/{max}</span>
       </div>
-      <div className="w-full rounded-full h-2 bg-black">
+      <div className="w-full rounded-full h-2 bg-secondary">
         <div
           className={`h-2 rounded-full transition-all duration-500 ${getColor(value)}`}
           style={{ width: `${percentage}%` }}
@@ -49,14 +49,14 @@ const SectionAnalysis: React.FC<{
     {section.strengths.length > 0 && (
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-3">
-          <CheckCircle className="w-5 h-5 text-positive" />
-          <h5 className="font-medium text-positive">Strengths</h5>
+          <CheckCircle className="w-5 h-5 text-primary" />
+          <h5 className="font-medium">Strengths</h5>
         </div>
         <ul className="space-y-2">
           {section.strengths.map((strength, index) => (
             <li key={index} className="flex items-start">
-              <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-sm">{capitalize(strength)}</span>
+              <div className="w-1.5 h-1.5 rounded-full mt-2 shrink-0" />
+              <span className="text-sm">• {capitalize(strength)}</span>
             </li>
           ))}
         </ul>
@@ -66,14 +66,14 @@ const SectionAnalysis: React.FC<{
     {section.improvements.length > 0 && (
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <AlertCircle className="w-5 h-5 text-caution" />
-          <h5 className="font-medium text-caution">Areas for Improvement</h5>
+          <AlertCircle className="w-5 h-5 text-yellow-500" />
+          <h5 className="font-medium">Areas for Improvement</h5>
         </div>
         <ul className="space-y-2">
           {section.improvements.map((improvement, index) => (
             <li key={index} className="flex items-start">
-              <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" />
-              <span className="text-sm">{capitalize(improvement)}</span>
+              <div className="w-1.5 h-1.5 rounded-full mt-2 shrink-0" />
+              <span className="text-sm">• {capitalize(improvement)}</span>
             </li>
           ))}
         </ul>
@@ -83,12 +83,6 @@ const SectionAnalysis: React.FC<{
 );
 
 export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: string }> = ({ result, resumeText }) => {
-  const getMatchScoreColor = (score: number) => {
-    if (score >= 8) return 'bg-primary';
-    if (score >= 6) return 'bg-primary/50';
-    return 'bg-primary/25';
-  };
-
   return (
     <div className="space-y-8">
       <div className="rounded-xl border p-6 border-border bg-background/50">
@@ -131,9 +125,9 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
             </div>
           </div>
 
-          <div className="w-full rounded-full h-3 bg-black mb-4">
+          <div className="w-full rounded-full bg-secondary h-2d mb-4">
             <div
-              className={`h-2 rounded-full transition-all duration-500 ${getMatchScoreColor(result.jobMatchScore)}`}
+              className="h-full rounded-full bg-primary"
               style={{ width: `${result.jobMatchScore * 10}%` }}
             />
           </div>
@@ -195,16 +189,14 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
             <Lightbulb className="w-6 h-6 text-primary" />
             Key Recommendations
           </h3>
-          <div className="space-y-2">
+          <ul className="space-y-2">
             {result.recommendations.map((recommendation, index) => (
-              <div key={index} className="flex items-start gap-3 border-b border-border p-2">
-                <div className="flex-shrink-0 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                  {index + 1}
-                </div>
-                <p className="leading-relaxed">{recommendation}</p>
-              </div>
+              <li key={index} className="flex items-center gap-2 text-sm">
+                <span className="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+                <span>{recommendation}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       )}
 

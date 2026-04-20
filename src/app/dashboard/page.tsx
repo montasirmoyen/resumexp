@@ -1,12 +1,11 @@
 "use client";
 
-import { FileUpload } from "@/components/FileUpload"
-import { PastAnalysesList } from "@/components/PastAnalysesList"
-import React, { useEffect, useState } from 'react';
+import { FileUpload } from "@/components/file-upload"
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnalysisState } from '@/types/analysis';
 import { AnalysisService } from '@/services/analysis-service';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function Upload() {
     const { user, loading } = useAuth();

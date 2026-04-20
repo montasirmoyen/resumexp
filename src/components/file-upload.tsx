@@ -2,8 +2,10 @@
 
 import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, File, X, AlertCircle, LockIcon } from 'lucide-react';
-import { PastAnalysesList } from './PastAnalysesList';
-import Link from 'next/link';
+import { PastAnalysesList } from './past-analyses-list';
+import Link from 'next/link'; 
+import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
 
 interface FileUploadProps {
   selectedFile: File | null;
@@ -39,7 +41,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       setElapsedTime((prev) => {
         const next = prev + 1;
 
-        // Update message based on time
         if (next < 10) {
           setCurrentMessage('Extracting your resume…');
         } else if (next < 20) {
@@ -55,7 +56,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     return () => clearInterval(interval);
   }, [isAnalyzing]);
 
-  // Fade effect when message changes
   useEffect(() => {
     setMessageOpacity(0);
     const timer = setTimeout(() => setMessageOpacity(1), 300);
@@ -87,13 +87,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     onFileSelect(null);
   }, [onFileSelect]);
 
-  const getFileIcon = (file: File) => {
-    if (file.type === 'application/pdf') return '📄';
-    if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') return '📝';
-    if (file.type === 'text/plain') return '📄';
-    return '📄';
-  };
-
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -122,8 +115,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           <div
             id="fileUploadArea"
             className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200  ${selectedFile
-              ? 'border-primary/50 bg-card'
-              : 'border-primary/50 bg-card hover:bg-dark/25 hover:border-primary'
+              ? 'border-primary'
+              : 'border-primary hover:bg-card/25 hover:border-primary'
               }`}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
@@ -148,11 +141,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                   </div>
                   <div className="text-center space-y-2">
                     <h3 className="text-lg font-semibold">Upload Your Resume</h3>
-                    <p>Drop your resume here or choose a file.</p>
                     <div id="uploadHelp" className="text-sm">PDF, DOCX, or TXT. Max 10MB.</div>
                     <div className="flex items-center space-x-2 text-sm">
-                      <LockIcon className="w-4 h-4 flex-shrink-0" />
-                      <span>Privacy guaranteed. Your file is never stored.</span>
+                      <LockIcon className="size-4" />
+                      <span>Privacy guaranteed, your file is never shared.</span>
                     </div>
                   </div>
                 </div>
@@ -160,7 +152,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             ) : (
               <div>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-center space-x-3">
+                  <div className="flex items-center justify-center space-x-3 bg-card p-4 rounded-lg">
                     <File />
                     <div className="text-left">
                       <div className="font-medium">{selectedFile.name}</div>
@@ -169,16 +161,16 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                     <button
                       onClick={removeFile}
                       disabled={isAnalyzing}
-                      className="p-1 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                      className="p-1 hover:text-red-300 transition-colors disabled:opacity-50"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="size-6" />
                     </button>
                   </div>
 
-                  <button
+                  <Button
                     onClick={() => onAnalyze(jobDescription.trim() || undefined)}
                     disabled={isAnalyzing}
-                    className="w-full px-6 py-3 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     aria-busy={isAnalyzing}
                     aria-live="polite"
                   >
@@ -189,11 +181,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                       </>
                     ) : (
                       <>
-                        <File className="w-4 h-4" />
+                        <File className="size-4" />
                         Analyze Resume
                       </>
                     )}
-                  </button>
+                  </Button>
                 </div>
 
                 {/* Job Description Input */}
@@ -203,19 +195,18 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                     Paste a job description to get a job match score and tailored suggestions.
                   </p>
                   <div>
-                    <textarea
+                    <Textarea
                       id="jobDescription"
                       name="jobDescription"
                       value={jobDescription}
                       onChange={(e) => setJobDescription(e.target.value.slice(0, 3000))}
                       maxLength={3000}
-                      rows={6}
                       className="w-full rounded-lg border border-border bg-background px-4 py-2 text-sm"
-                      placeholder="Paste job description here (max 3000 characters)..."
+                      placeholder=". . ."
                       disabled={isAnalyzing}
                     />
                     <p className="text-xs text-muted-foreground mt-1 text-right">
-                      {jobDescription.length} / 3000 characters
+                      {jobDescription.length} / 3000 char limit
                     </p>
                   </div>
                 </div>
