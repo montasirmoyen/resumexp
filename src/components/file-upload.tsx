@@ -3,7 +3,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, File, X, AlertCircle, LockIcon } from 'lucide-react';
 import { PastAnalysesList } from './past-analyses-list';
-import Link from 'next/link';
+import Link from 'next/link'; 
 
 interface FileUploadProps {
   selectedFile: File | null;
@@ -122,8 +122,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           <div
             id="fileUploadArea"
             className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200  ${selectedFile
-              ? 'border-primary/50 bg-card'
-              : 'border-primary/50 bg-card hover:bg-dark/25 hover:border-primary'
+              ? 'border-primary'
+              : 'border-primary hover:bg-card/25 hover:border-primary'
               }`}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
@@ -148,11 +148,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                   </div>
                   <div className="text-center space-y-2">
                     <h3 className="text-lg font-semibold">Upload Your Resume</h3>
-                    <p>Drop your resume here or choose a file.</p>
                     <div id="uploadHelp" className="text-sm">PDF, DOCX, or TXT. Max 10MB.</div>
                     <div className="flex items-center space-x-2 text-sm">
-                      <LockIcon className="w-4 h-4 flex-shrink-0" />
-                      <span>Privacy guaranteed. Your file is never stored.</span>
+                      <LockIcon className="size-4" />
+                      <span>Privacy guaranteed, your file is never shared.</span>
                     </div>
                   </div>
                 </div>
