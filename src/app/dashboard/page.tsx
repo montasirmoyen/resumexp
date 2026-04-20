@@ -1,8 +1,7 @@
 "use client";
 
 import { FileUpload } from "@/components/FileUpload"
-import { PastAnalysesList } from "@/components/PastAnalysesList"
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnalysisState } from '@/types/analysis';
 import { AnalysisService } from '@/services/analysis-service';
