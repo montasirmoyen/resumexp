@@ -8,7 +8,8 @@ import {
   signInWithPopup
 } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
-import { Mail, Lock, Chrome } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
+import { FaChrome } from 'react-icons/fa'
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -70,7 +71,7 @@ export default function AuthPage() {
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-border rounded-lg hover:bg-primary/10 transition-colors font-medium mb-6 disabled:opacity-50"
           >
-            <Chrome className="w-5 h-5" />
+            <FaChrome className="w-5 h-5" />
             Continue with Google
           </button>
 
