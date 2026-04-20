@@ -14,6 +14,12 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+export const metadata = {
+  title: "ResumeXP",
+  description:
+    "ResumeXP is an AI-powered resume analysis and optimization tool that helps job seekers improve their resumes and increase their chances of landing their dream jobs. With advanced natural language processing and machine learning algorithms, ResumeXP provides personalized feedback and actionable insights to enhance your resume's effectiveness.",
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
