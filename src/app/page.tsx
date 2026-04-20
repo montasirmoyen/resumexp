@@ -5,12 +5,16 @@ import SocialProof from '@/components/ui/social-proof'
 
 const features = [
   {
-    title: 'Powerful Campaign Tracking & ROI Analysis',
-    description: 'Track campaign performance and analyze return on investment'
+    title: 'Detailed Resume Scoring',
+    description: 'Get ratings across content, structure, readability, keywords, and professionalism'
   },
   {
-    title: 'Customizable Reporting & Data Exportation',
-    description: 'Create custom reports and export data easily'
+    title: 'ATS & Job Match Insights',
+    description: 'Check ATS compliance and compare your resume against any job description'
+  },
+  {
+    title: 'Actionable Next Steps',
+    description: 'Receive clear section-by-section improvements and practical recommendations'
   }
 ]
 
