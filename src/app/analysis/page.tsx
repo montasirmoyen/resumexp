@@ -7,6 +7,7 @@ import { AnalysisDisplay } from '@/components/analysis-display';
 import { computeJdMatch } from '@/services/scoring';
 import { SavedAnalysis, AnalysisService } from '@/services/analysis-service';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function AnalysisPage() {
   const router = useRouter();
