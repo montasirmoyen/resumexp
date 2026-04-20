@@ -4,6 +4,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, File, X, AlertCircle, LockIcon } from 'lucide-react';
 import { PastAnalysesList } from './past-analyses-list';
 import Link from 'next/link'; 
+import { Button } from './ui/button';
 
 interface FileUploadProps {
   selectedFile: File | null;
@@ -86,13 +87,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const removeFile = useCallback(() => {
     onFileSelect(null);
   }, [onFileSelect]);
-
-  const getFileIcon = (file: File) => {
-    if (file.type === 'application/pdf') return '📄';
-    if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') return '📝';
-    if (file.type === 'text/plain') return '📄';
-    return '📄';
-  };
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
