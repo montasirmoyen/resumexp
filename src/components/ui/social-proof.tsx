@@ -33,16 +33,6 @@ const SocialProof = ({ features }: { features: Feature[] }) => {
                             ))}
                         </ul>
                     </div>
-
-                    <div className='shrink-0'>
-                        <Image
-                            src='/rxp-1.png'
-                            alt='Resume analysis preview'
-                            className='hidden w-142 object-contain dark:inline-block'
-                            width={568}
-                            height={360}
-                        />
-                    </div>
                 </div>
             </div>
         </section>
