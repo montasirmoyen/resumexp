@@ -29,7 +29,7 @@ const RatingBar: React.FC<{ label: string; value: number; max?: number }> = ({
         <span className="text-sm font-medium">{label}</span>
         <span className="text-sm font-bold">{value}/{max}</span>
       </div>
-      <div className="w-full rounded-full h-2 bg-black">
+      <div className="w-full rounded-full h-2 bg-secondary">
         <div
           className={`h-2 rounded-full transition-all duration-500 ${getColor(value)}`}
           style={{ width: `${percentage}%` }}
