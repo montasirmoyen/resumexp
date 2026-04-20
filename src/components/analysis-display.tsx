@@ -83,12 +83,6 @@ const SectionAnalysis: React.FC<{
 );
 
 export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: string }> = ({ result, resumeText }) => {
-  const getMatchScoreColor = (score: number) => {
-    if (score >= 8) return 'bg-primary';
-    if (score >= 6) return 'bg-primary/50';
-    return 'bg-primary/25';
-  };
-
   return (
     <div className="space-y-8">
       <div className="rounded-xl border p-6 border-border bg-background/50">
@@ -131,9 +125,9 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
             </div>
           </div>
 
-          <div className="w-full rounded-full h-3 bg-black mb-4">
+          <div className="w-full rounded-full bg-secondary h-2 mb-4">
             <div
-              className={`h-2 rounded-full transition-all duration-500 ${getMatchScoreColor(result.jobMatchScore)}`}
+              className="h-full rounded-full bg-primary"
               style={{ width: `${result.jobMatchScore * 10}%` }}
             />
           </div>
