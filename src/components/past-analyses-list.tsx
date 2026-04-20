@@ -155,14 +155,15 @@ export function PastAnalysesList({ onAnalysisSelect }: PastAnalysesListProps) {
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   onClick={() => handleView(analysis)}
-                  className="w-full px-4 py-2 bg-primary text-background hover:bg-primary/25 hover:text-primary rounded-lg transition-colors font-medium"
+                  className="w-full px-4 py-2"
                 >
                   View Analysis
                 </Button>
                 <Button
                   onClick={() => handleDelete(analysis)}
                   disabled={deletingId === analysis.id}
-                  className="w-full px-4 py-2 bg-destructive text-foreground hover:bg-destructive/25 hover:text-destructive rounded-lg transition-colors font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                  variant={"destructive"}
+                  className="w-full px-4 py-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {deletingId === analysis.id ? 'Deleting…' : 'Delete'}
                 </Button>
