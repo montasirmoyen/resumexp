@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnalysisResult } from '@/types/analysis';
-import { AnalysisDisplay } from '@/components/AnalysisDisplay';
+import { AnalysisDisplay } from '@/components/analysis-display';
 import { computeJdMatch } from '@/services/scoring';
 import { SavedAnalysis, AnalysisService } from '@/services/analysis-service';
 import Link from 'next/link';

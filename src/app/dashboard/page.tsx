@@ -1,6 +1,6 @@
 "use client";
 
-import { FileUpload } from "@/components/FileUpload"
+import { FileUpload } from "@/components/file-upload"
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnalysisState } from '@/types/analysis';
