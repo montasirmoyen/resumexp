@@ -2,16 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AnalysisService } from '@/services/analysis-service';
 import { OpenRouter } from '@openrouter/sdk';
 
-let AI_MODEL = 'nvidia/nemotron-3-nano-30b-a3b:free';
-const AVAILABLE_MODELS = [
-  'arcee-ai/trinity-mini:free',
-  'nvidia/nemotron-3-nano-30b-a3b:free',
-];
-function changeModel() {
-  const otherModels = AVAILABLE_MODELS.filter((m) => m !== AI_MODEL);
-  const randomIndex = Math.floor(Math.random() * otherModels.length);
-  AI_MODEL = otherModels[randomIndex];
-}
+const AI_MODEL = 'nvidia/nemotron-3-nano-30b-a3b:free';
 const API_KEY = process.env.OPENROUTER_API_KEY;
 const USE_MOCK_DATA = false;
 const PROVIDER_ERROR_MESSAGE = 'Provider returned error';
@@ -49,8 +40,6 @@ async function sendWithProviderRetry(
       throw error;
     }
   }
-
-  changeModel();
 
   return openRouter.chat.send(payload);
 }
