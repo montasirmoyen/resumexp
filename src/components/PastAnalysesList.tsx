@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnalysisService, SavedAnalysis } from '@/services/analysis-service';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
