@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { AnalysisService, SavedAnalysis } from '@/services/analysis-service';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth-context';
 import { useRouter } from 'next/navigation';
 
 interface PastAnalysesListProps {

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail, Lock } from 'lucide-react';
 import { FaChrome } from 'react-icons/fa'
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function AuthPage() {
   const { user, loading: authLoading, login, register, loginWithGoogle } = useAuth();

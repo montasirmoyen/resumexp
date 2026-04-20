@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnalysisState } from '@/types/analysis';
 import { AnalysisService } from '@/services/analysis-service';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function Upload() {
     const { user, loading } = useAuth();
