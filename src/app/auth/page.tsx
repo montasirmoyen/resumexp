@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail, Lock } from 'lucide-react';
 import { FaChrome } from 'react-icons/fa'
 import { useAuth } from '@/contexts/auth-context';
+import { Button } from '@/components/ui/button';
 
 export default function AuthPage() {
   const { user, loading: authLoading, login, register, loginWithGoogle } = useAuth();
@@ -87,14 +88,15 @@ export default function AuthPage() {
         </div>
 
         <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
-          <button
+          <Button
             onClick={handleGoogleSignIn}
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-border rounded-lg hover:bg-primary/10 transition-colors font-medium mb-6 disabled:opacity-50"
+            variant={"outline"}
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-border rounded-lg mb-6 disabled:opacity-50"
           >
             <FaChrome className="w-5 h-5" />
             Continue with Google
-          </button>
+          </Button>
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
@@ -165,30 +167,30 @@ export default function AuthPage() {
             )}
 
             {error && (
-              <div className="text-sm text-red-500 bg-red-500 p-3 rounded-lg">
+              <div className="text-sm bg-red-500 p-3 rounded-lg">
                 {error}
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-4 py-3 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-colors font-medium disabled:opacity-50"
+              className="w-full px-4 py-3 disabled:opacity-50"
             >
               {isSubmitting ? 'Please wait...' : (isLogin ? 'Sign In' : 'Sign Up')}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-6 text-center">
-            <button
+            <Button
               onClick={() => {
                 setIsLogin(!isLogin);
                 setError('');
               }}
-              className="text-sm text-primary hover:underline"
+              className="hover:underline bg-transparent border-none text-foreground hover:bg-transparent"
             >
               {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
