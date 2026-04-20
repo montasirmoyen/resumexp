@@ -189,14 +189,14 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps & { resumeText: stri
             <Lightbulb className="w-6 h-6 text-primary" />
             Key Recommendations
           </h3>
-            <ul className="space-y-2">
+          <ul className="space-y-2">
             {result.recommendations.map((recommendation, index) => (
               <li key={index} className="flex items-center gap-2 text-sm">
-              <span className="w-2 h-2 rounded-full bg-primary shrink-0"></span>
-              <span>{recommendation}</span>
+                <span className="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+                <span>{recommendation}</span>
               </li>
             ))}
-            </ul>
+          </ul>
         </div>
       )}
 
