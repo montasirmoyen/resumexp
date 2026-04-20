@@ -1,5 +1,4 @@
 import { CircleCheckIcon } from 'lucide-react'
-import Image from 'next/image'
 
 type Feature = {
     title: string
