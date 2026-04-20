@@ -3,6 +3,9 @@ import { Geist_Mono, Figtree } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
+import Navbar from '@/components/Navbar';
+import Footer from "@/components/Footer";
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const figtree = Figtree({subsets:['latin'],variable:'--font-sans'})
 
@@ -23,7 +26,13 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", figtree.variable)}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )
