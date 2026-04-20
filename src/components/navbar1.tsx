@@ -71,8 +71,8 @@ const Navbar = ({
   menu = [
     { title: "Home", url: "/" },
     {
-      title: "Chat",
-      url: "/chat",
+      title: "Dashboard",
+      url: "/dashboard",
       authRequired: false,
     },
   ],
