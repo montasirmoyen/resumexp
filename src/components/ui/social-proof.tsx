@@ -13,11 +13,11 @@ const SocialProof = ({ features }: { features: Feature[] }) => {
                 <div className='flex items-center gap-20 max-lg:flex-col'>
                     <div>
                         <div className='space-y-4'>
-                            <p className='text-primary text-sm font-medium uppercase'>Social Proof</p>
-                            <h2 className='text-2xl font-semibold md:text-3xl lg:text-4xl'>Create Impactful White Label Reports</h2>
+                            <p className='text-primary text-sm font-medium uppercase'>Why ResumeXP</p>
+                            <h2 className='text-2xl font-semibold md:text-3xl lg:text-4xl'>Everything you need to improve your resume with confidence</h2>
                             <p className='text-muted-foreground text-lg'>
-                                Craft customizable reports that showcase your campaign&apos;s success, align with your brand, and
-                                simplify sharing insights with stakeholders while enabling data export and ROI analysis.
+                                Get an AI-powered review in seconds, understand how your resume performs, and apply
+                                clear recommendations to increase your interview chances.
                             </p>
                         </div>
 
@@ -25,7 +25,10 @@ const SocialProof = ({ features }: { features: Feature[] }) => {
                             {features.map((feature, index) => (
                                 <li key={index} className='flex gap-2'>
                                     <CircleCheckIcon className='mt-0.75 size-5' />
-                                    <span>{feature.title}</span>
+                                    <div>
+                                        <p>{feature.title}</p>
+                                        <p className='text-muted-foreground text-base font-normal'>{feature.description}</p>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -33,15 +36,8 @@ const SocialProof = ({ features }: { features: Feature[] }) => {
 
                     <div className='shrink-0'>
                         <Image
-                            src='https://cdn.shadcnstudio.com/ss-assets/blocks/marketing/social-proof/image-1.png'
-                            alt='Social Widget'
-                            className='w-142 object-contain dark:hidden'
-                            width={568}
-                            height={360}
-                        />
-                        <Image
-                            src='https://cdn.shadcnstudio.com/ss-assets/blocks/marketing/social-proof/image-1-dark.png'
-                            alt='Social Widget'
+                            src='/rxp-1.png'
+                            alt='Resume analysis preview'
                             className='hidden w-142 object-contain dark:inline-block'
                             width={568}
                             height={360}
